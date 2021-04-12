@@ -1,0 +1,3 @@
+[submodule "stimuli"]
+	path = stimuli
+	url = https://git.mpib-berlin.mpg.de/wittkuhn/svlo
