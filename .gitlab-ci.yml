@@ -13,7 +13,7 @@ datalad:
   before_script:
     - cd ..
     - rm -rf $CI_PROJECT_NAME
-    - datalad clone $CI_REPOSITORY_URL
+    - datalad install $CI_REPOSITORY_URL --recursive
     - cd $CI_PROJECT_NAME
   script:
     - rclone config create zoo-illustration seafile url https://keeper.mpdl.mpg.de/ user wittkuhn@mpib-berlin.mpg.de library zoo-illustration pass $CI_KEEPER_PASS
@@ -32,7 +32,7 @@ datalad:
 
 renv:
   stage: generate
-  image: registry.git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/renv:0.1.3
+  image: registry.git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/renv:latest
   script:
     - Rscript code/zoo-stimuli-badges.R
     - Rscript code/zoo-stimuli-badges.R
