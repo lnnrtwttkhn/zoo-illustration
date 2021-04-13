@@ -1,0 +1,44 @@
+stages:
+  - retrieve
+  - generate
+
+datalad:
+  stage: retrieve
+  variables:
+    GIT_STRATEGY: none
+    GIT_DEPTH: 10
+  image:
+    name: registry.git.mpib-berlin.mpg.de/wittkuhn/zoo/datalad:0.13.5
+    entrypoint: [""]
+  before_script:
+    - cd ..
+    - rm -rf $CI_PROJECT_NAME
+    - datalad clone $CI_REPOSITORY_URL
+    - cd $CI_PROJECT_NAME
+  script:
+    - rclone config create zoo-illustration seafile url https://keeper.mpdl.mpg.de/ user wittkuhn@mpib-berlin.mpg.de library zoo-illustration pass $CI_KEEPER_PASS
+    - git config --global user.name "GitLab CI"
+    - git config --global user.email "ci@git.mpib-berlin.mpg.de"
+    - datalad siblings enable -d . -s keeper
+    - datalad siblings configure -s origin --publish-depends keeper
+    - datalad get output
+    - datalad unlock output
+  artifacts:
+    paths:
+      - output
+    expire_in: 1 hour
+  only:
+    - master
+
+renv:
+  stage: generate
+  image: registry.git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/renv:0.1.3
+  script:
+    - Rscript code/zoo-stimuli-badges.R
+    - Rscript code/zoo-stimuli-badges.R
+  artifacts:
+    paths:
+      - output
+    expire_in: 1 hour
+  only:
+    - master
