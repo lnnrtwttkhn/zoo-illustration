@@ -25,6 +25,7 @@ datalad:
     - datalad unlock output
   artifacts:
     paths:
+      - input
       - output
     expire_in: 1 hour
   only:
