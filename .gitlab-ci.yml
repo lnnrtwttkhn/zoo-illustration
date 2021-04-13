@@ -35,7 +35,7 @@ renv:
   image: registry.git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/renv:latest
   script:
     - Rscript code/zoo-stimuli-badges.R
-    - Rscript code/zoo-stimuli-badges.R
+    - Rscript code/zoo-transition-matrix.R
   artifacts:
     paths:
       - output
