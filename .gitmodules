@@ -1,3 +1,4 @@
 [submodule "input/stimuli"]
 	path = input/stimuli
 	url = https://git.mpib-berlin.mpg.de/wittkuhn/svlo
+	branch = zoo_animals_png
