@@ -2,6 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-*.pdf
+*Rplot*.pdf
 output/badges
 output/transition_matrix
