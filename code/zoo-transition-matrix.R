@@ -77,6 +77,9 @@ fig_trans_mat_both = fig_trans_mat_uni + fig_trans_mat_bi +
 ggsave(file.path(path_output, "zoo_graphs_transition_matrix.pdf"),
        device = cairo_pdf(), dpi = "retina",
        fig_trans_mat_both, width = 8, height = 3.5)
+ggsave(file.path(path_output, "zoo_graphs_transition_matrix.png"),
+       device = "png", dpi = "retina",
+       fig_trans_mat_both, width = 8, height = 3.5)
 
 
 
