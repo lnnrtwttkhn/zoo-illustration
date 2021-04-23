@@ -40,7 +40,8 @@ renv:
     - Rscript code/zoo-transition-matrix.R
   artifacts:
     paths:
-      - output
+      - "output/*.pdf"
+      - "output/*.png"
     expire_in: 1 hour
   only:
     - master
