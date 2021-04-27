@@ -3,6 +3,8 @@
 .RData
 .Ruserdata
 *Rplot*.pdf
+*.html
 output/badges
 output/transition_matrix
 output/study_procedure
+output/graph_structure

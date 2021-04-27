@@ -1,6 +1,7 @@
 stages:
   - retrieve
   - generate
+  - publish
 
 datalad:
   stage: retrieve
@@ -39,9 +40,12 @@ renv:
     - Rscript code/zoo-stimuli-badges.R
     - Rscript code/zoo-transition-matrix.R
     - Rscript code/zoo-study-procedure.R
+    - Rscript code/zoo-graph-structure.R
   artifacts:
     paths:
       - output
     expire_in: 1 hour
   only:
     - master
+
+
