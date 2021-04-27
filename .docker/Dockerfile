@@ -14,5 +14,5 @@ r-cran-patchwork r-cran-cowplot \
 r-cran-magic r-cran-magick
 
 # add missing source packages in blocks of 4
-RUN Rscript -e "installOrQuit(c('here', 'pacman'))"
+RUN Rscript -e "installOrQuit(c('here', 'pacman', 'assertr', 'viridis', 'lemon'))"
 
