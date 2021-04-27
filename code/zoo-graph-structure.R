@@ -56,20 +56,19 @@ dt_badge = data.table(
     ymax = y + badge_size * 0.5
   )]
 
+num_nodes = 6
 dt_lines = dt_badge %>%
   .[,c("badge", "x", "y")] %>%
-  .[rep(seq_len(.N), 6), ] %>%
+  .[rep(seq_len(.N), num_nodes), ] %>%
   setorder(badge) %>%
-  .[, xend := rep(unique(x), 6)] %>%
-  .[, yend := rep(unique(y), 6)] %>%
-  .[, badge_next := rep(unique(badge), 6)] %>%
+  .[, xend := rep(unique(dt_badge$x), num_nodes)] %>%
+  .[, yend := rep(unique(dt_badge$y), num_nodes)] %>%
+  .[, badge_next := rep(unique(dt_badge$badge), num_nodes)] %>%
   # remove duplication of nearest neighbor:
   .[!(abs(badge_next - badge) %in% c(1, 5)),] %>%
   .[, ":="(probability = ifelse(
     abs(badge_next - badge) %in% c(1), "0.7", "0.1")
   )]
-  
-  
   
 ggplot(dat, aes(x0 = x, y0 = y)) + 
   geom_segment(data = dt_lines, mapping = aes(
