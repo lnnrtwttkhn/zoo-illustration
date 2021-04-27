@@ -7,7 +7,7 @@ dir.create(path_output, showWarnings = FALSE)
 
 duration_s1 = c(2, 2, 4, 2, 2, 5, 2, 2, rep(6, 8), 5, 3)
 events_s1 = c("Localizer", "T1-Orientation", "T1-MPRAGE", "MB4-Orientation",
-           "Shimming", "Rest Run 1", "Instructions", "Training Run 1",
+           "Shimming", "Rest Run 1", "Instructions", "Training",
            paste(rep("Recall Run", 8), seq(8)),
            "Rest Run 2", "Fieldmaps")
 t_start_s1 = c(0, head(cumsum(duration_s1), -1))
@@ -36,9 +36,10 @@ sessions = rbind(session1, session2) %>%
   .[, by = .(session), label_breaks := t_start_gap + duration / 2] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Recall"), "Task: Recall", "Eyes closed")] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Training"), "Task: Training", task)] %>%
+  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Instructions"), "Task: Instructions", task)] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Main"), "Task: Main", task)] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Rest"), "Rest (Fixation)", task)] %>%
-  .[, task := as.factor(factor(task, levels = c("Task: Training", "Task: Recall", "Task: Main", "Rest (Fixation)", "Eyes closed")))]
+  .[, task := as.factor(factor(task, levels = c("Task: Instructions", "Task: Training", "Task: Recall", "Task: Main", "Rest (Fixation)", "Eyes closed")))]
 
 plot_session = function(df) {
   ggplot(data = df,
