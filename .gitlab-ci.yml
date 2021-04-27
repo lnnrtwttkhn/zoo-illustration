@@ -38,7 +38,7 @@ renv:
   script:
     - Rscript code/zoo-stimuli-badges.R
     - Rscript code/zoo-transition-matrix.R
-    - Rscript code/zoo-study-procecure.R
+    - Rscript code/zoo-study-procedure.R
   artifacts:
     paths:
       - output
