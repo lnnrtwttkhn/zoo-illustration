@@ -1,4 +1,4 @@
-FROM r-base:4.0.3
+FROM r-base:4.0.5
 
 RUN echo 'APT::Get::Install-Recommends "false";' >> /etc/apt/apt.conf
 RUN echo 'options(Ncpus=4, repos=structure(c(CRAN="https://cloud.r-project.org")))' > ~/.Rprofile

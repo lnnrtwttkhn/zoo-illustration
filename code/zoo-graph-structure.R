@@ -26,7 +26,6 @@ get_images = function(path_files){
 }
 
 images_raster = get_images(path_files=path_files)
-length(images_raster)
 
 deg2rad = function(degree){
   radian = 2 * pi * degree / 360
