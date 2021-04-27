@@ -60,11 +60,9 @@ dt_lines = dt_badge %>%
   .[,c("badge", "x", "y")] %>%
   .[rep(seq_len(.N), 6), ] %>%
   setorder(badge) %>%
-  .[, ":="(
-    xend = rep(x, 6),
-    yend = rep(y, 6),
-    badge_next = rep(badge, 6)
-  )] %>%
+  .[, xend := rep(unique(x), 6)] %>%
+  .[, yend := rep(unique(y), 6)] %>%
+  .[, badge_next := rep(unique(badge), 6)] %>%
   # remove duplication of nearest neighbor:
   .[!(abs(badge_next - badge) %in% c(1, 5)),] %>%
   .[, ":="(probability = ifelse(
