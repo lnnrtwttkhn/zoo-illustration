@@ -71,19 +71,93 @@ plot_session = function(df) {
 }
 
 plot_s1 = plot_session(sessions %>% .[session == "Session 1"]) +
-  theme(legend.position = "none") +
   ggtitle("Session 1")
 plot_s2 = plot_session(sessions %>% .[session == "Session 2"]) +
   ggtitle("Session 2")
-study_procedure = (plot_s1  / plot_s2) +
+plot_s1_nolegend = plot_s1 + theme(legend.position = "none")
+study_procedure = (plot_s1_nolegend  / plot_s2) +
   plot_layout(guides = "collect") +
   plot_annotation(tag_levels = "a") &
   theme(text = element_text("Helvetica"))
 study_procedure
+
+ggsave(file.path(path_output, "zoo_study_procedure_session1.pdf"),
+       device = "pdf", dpi = "retina",
+       plot_s1, width = 8, height = 3)
+ggsave(file.path(path_output, "zoo_study_procedure_session1.png"),
+       device = "png", dpi = "retina",
+       plot_s1, width = 8, height = 3)
+
+ggsave(file.path(path_output, "zoo_study_procedure_session2.pdf"),
+       device = "pdf", dpi = "retina",
+       plot_s2, width = 8, height = 3)
+ggsave(file.path(path_output, "zoo_study_procedure_session2.png"),
+       device = "png", dpi = "retina",
+       plot_s2, width = 8, height = 3)
+
 ggsave(file.path(path_output, "zoo_study_procedure.pdf"),
        device = "pdf", dpi = "retina",
        study_procedure, width = 8, height = 6)
 ggsave(file.path(path_output, "zoo_study_procedure.png"),
        device = "png", dpi = "retina",
        study_procedure, width = 8, height = 6)
- 
+
+session2_main1 = session2 %>%
+  .[stringr::str_detect(events, "Main")] %>%
+  verify(t_stop - t_start == duration)
+
+session2_main2 = session2_main1 %>% filter(row_number() == 3)
+
+session2_main = rbind(session2_main1, session2_main2) %>%
+  setDT(.) %>%
+  setorder(events) %>%
+  .[, ":="(gap = ifelse(stringr::str_detect(events, "Run 3"), 0, gap))] %>%
+  .[, by = .(session), t_start_gap := t_start + (gap * seq(0, .N - 1))] %>%
+  .[, by = .(session), t_stop_gap := t_stop + (gap * seq(0, .N - 1))] %>%
+  .[, by = .(session), label_breaks := t_start_gap + duration / 2] %>%
+  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Run 1"), "Graph 1", "Graph 2")] %>%
+  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Run 2"), "Graph 1", task)] %>%
+  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Run 3"), "Graph 1 & 2", task)] %>%
+  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Run 4"), "Graph 2", task)] %>%
+  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Run 4"), "Graph 2", task)] %>%
+  .[, task := as.factor(factor(task, levels = c("Graph 1", "Graph 1 & 2", "Graph 2")))]
+
+plot_main = function(df) {
+  ggplot(data = df,
+         aes(xmin = t_start_gap, xmax = t_stop_gap, ymin = 0, ymax = 1))  + 
+    geom_rect(aes(fill = task), color = "black") +
+    geom_text(aes(x = label_breaks, y = 0.5, label = duration)) +
+    #facet_grid(rows = vars(session), scales = "free", switch = "y") +
+    scale_y_continuous(name = "Duration\n(in min.)") +
+    scale_x_continuous(
+      breaks = df$label_breaks, labels = df$events, name = "Event",
+      sec.axis = dup_axis(breaks = df$t_stop_gap, labels = df$t_stop_gap,
+                          name = "Time in the MRI scanner (in min.)")) +
+    coord_capped_cart(top = "right") +
+    scale_fill_discrete(name = "Graph structure", drop = FALSE) +
+    theme(axis.text.x.bottom = element_text(angle = 45, hjust = 1)) +
+    theme(axis.text.x.top = element_text(angle = 45, hjust = 0.5, vjust = 0.5)) +
+    theme(panel.grid.major = element_blank()) +
+    theme(panel.grid.minor = element_blank()) +
+    theme(panel.background = element_blank()) +
+    theme(axis.line.y = element_blank()) +
+    theme(axis.ticks = element_line(color = "white")) +
+    theme(axis.title = element_text(color = "black")) +
+    theme(axis.text.y = element_blank()) +
+    theme(axis.text.x = element_text(color = "black")) +
+    theme(axis.line.x.top = element_line(color = "black")) +
+    theme(axis.ticks.x.top = element_line(color = "black")) +
+    theme(plot.title = element_text(hjust = 0.5))
+}
+
+plot_graph_procedure = plot_main(session2_main %>% .[session == "Session 2"]) +
+  ggtitle("Session 2 - Graph learning")
+plot_graph_procedure
+
+ggsave(file.path(path_output, "zoo_graph_procedure.pdf"),
+       device = "pdf", dpi = "retina",
+       plot_graph_procedure, width = 5, height = 3)
+ggsave(file.path(path_output, "zoo_graph_procedure.png"),
+       device = "png", dpi = "retina",
+       plot_graph_procedure, width = 5, height = 3)
+
