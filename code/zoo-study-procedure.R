@@ -102,16 +102,13 @@ ggsave(file.path(path_output, "zoo_study_procedure.png"),
        device = "png", dpi = "retina",
        study_procedure, width = 8, height = 6)
 
-session2_main1 = session2 %>%
+session2_main = session2 %>%
   .[stringr::str_detect(events, "Main")] %>%
   verify(t_stop - t_start == duration)
 
-session2_main2 = session2_main1 %>% filter(row_number() == 3)
-
-session2_main = rbind(session2_main1, session2_main2) %>%
+session2_main = session2_main %>%
   setDT(.) %>%
   setorder(events) %>%
-  .[, ":="(gap = ifelse(stringr::str_detect(events, "Run 3"), 0, gap))] %>%
   .[, by = .(session), t_start_gap := t_start + (gap * seq(0, .N - 1))] %>%
   .[, by = .(session), t_stop_gap := t_stop + (gap * seq(0, .N - 1))] %>%
   .[, by = .(session), label_breaks := t_start_gap + duration / 2] %>%
