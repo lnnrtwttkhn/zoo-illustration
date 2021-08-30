@@ -8,3 +8,4 @@ zoo-illustration.Rproj annex.largefiles=nothing
 .gitignore annex.largefiles=nothing
 .docker annex.largefiles=nothing
 .gitlab-ci.yml annex.largefiles=nothing
+Makefile annex.largefiles=nothing

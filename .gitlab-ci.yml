@@ -37,10 +37,7 @@ renv:
   stage: generate
   image: registry.git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/renv:latest
   script:
-    - Rscript code/zoo-stimuli-badges.R
-    - Rscript code/zoo-transition-matrix.R
-    - Rscript code/zoo-study-procedure.R
-    - Rscript code/zoo-graph-structure.R
+    - make all
   artifacts:
     paths:
       - output
