@@ -5,7 +5,7 @@ RUN echo 'options(Ncpus=4, repos=structure(c(CRAN="https://cloud.r-project.org")
 RUN echo 'installOrQuit <- function(p) {tryCatch(install.packages(p), warning=function(e){q(status=1)})}' >> ~/.Rprofile
 
 # external dependencies
-RUN apt-get update && apt-get install -y pandoc pandoc-citeproc && apt-get clean
+RUN apt-get update && apt-get install -y pandoc pandoc-citeproc imagemagick && apt-get clean
 
 # prefer binary R packages, if they are available
 RUN apt-get update && apt-get install -y \

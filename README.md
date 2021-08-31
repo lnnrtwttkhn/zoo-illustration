@@ -24,3 +24,5 @@ Download the **illustrations** from the latest build [here](https://git.mpib-ber
 - ["Easy image processing in R using the magick package"](https://www.datanovia.com/en/blog/easy-image-processing-in-r-using-the-magick-package/)
 - [Stack Overflow: "R magick Square crop and circular mask"](https://stackoverflow.com/questions/64597525/r-magick-square-crop-and-circular-mask)
 - [Stack Overflow: "Most efficient way to crop image to circle (in R)?"](https://stackoverflow.com/questions/40066806/most-efficient-way-to-crop-image-to-circle-in-r)
+- [StatsExchange: "How do I create an animated gif from still images"](https://askubuntu.com/questions/648244/how-do-i-create-an-animated-gif-from-still-images-preferably-with-the-command-l)
+- [StackOverflow: "Imagemagick convert command: set delay time for the last frame"](https://stackoverflow.com/questions/40191000/imagemagick-convert-command-set-delay-time-for-the-last-frame)
