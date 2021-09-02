@@ -56,18 +56,19 @@ for (path in paths_folders) {
     cat(text_file)
     text_download = "Download figure as:"
     for (ext in extentions) {
-      path_file = file.path(path_template, folder_name, paste0(file, ext))
+      path_file = file.path(path_output, folder_name, paste0(file, ext))
+      path_link = file.path(path_template, folder_name, paste0(file, ext))
       if (!file.exists(path_file)) {
         next
       }
       if (Sys.getenv("CI") == "true") {
-        path_file = paste0(path_file, "?job=renv")
+        path_link = paste0(path_link, "?job=renv")
       }
       if (ext %in% c(".png", ".gif")) {
         text_image = sprintf("![](%s)%s", path_file, newline)
         cat(text_image)
       }
-      text_download = sprintf(paste(text_download, "[[%s]](%s)"), ext, path_file)
+      text_download = sprintf(paste(text_download, "[[%s]](%s)"), ext, path_link)
     }
     text_download = paste0(text_download, newline)
     cat(text_download)
