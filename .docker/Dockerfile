@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y pandoc pandoc-citeproc imagemagick && a
 RUN apt-get update && apt-get install -y \
 r-cran-tidyverse r-cran-data.table \
 r-cran-patchwork r-cran-cowplot \
-r-cran-magic r-cran-magick r-cran-ggforce
+r-cran-magic r-cran-magick r-cran-ggforce \
+r-cran-rmarkdown
 
 # add missing source packages in blocks of 4
 RUN Rscript -e "installOrQuit(c('here', 'pacman', 'assertr', 'viridis', 'lemon'))"

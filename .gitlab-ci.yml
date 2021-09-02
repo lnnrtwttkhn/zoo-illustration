@@ -30,8 +30,8 @@ datalad:
       - input
       - output
     expire_in: 1 hour
-  only:
-    - master
+  # only:
+  #   - master
 
 renv:
   stage: generate
@@ -42,7 +42,17 @@ renv:
     paths:
       - output
     expire_in: 1 hour
-  only:
-    - master
+  # only:
+  #   - master
 
+pages:
+  stage: publish
+  image: registry.git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/renv:latest
+  script:
+    - make index.html
+  artifacts:
+    paths:
+      - public
+  # only:
+  #   - master
 
