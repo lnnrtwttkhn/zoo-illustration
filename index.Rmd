@@ -1,0 +1,82 @@
+---
+title: "Zoo Illustration"
+author: "Lennart Wittkuhn & Nico Schuck"
+date: "Last update: `r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2:
+    toc: yes
+    self_contained: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: false
+    highlight: pygments
+    theme: darkly
+    code_folding: "hide"
+    df_print: paged
+    fig_caption: true
+fig.align: "center"
+email: wittkuhn@mpib-berlin.mpg.de
+---
+
+```{r, echo=FALSE, message=FALSE, include=FALSE}
+if (!requireNamespace("pacman")) install.packages("pacman")
+packages = c("here")
+pacman::p_load(char = packages)
+```
+
+```{r, echo=FALSE, message=FALSE, include=FALSE}
+path_output = here::here("output")
+return_code = Sys.getenv("CI")
+if (return_code == "true") {
+  system2("echo", args = c("Running in CI environment"))
+  branch = Sys.getenv("CI_COMMIT_BRANCH")
+  repo_url = Sys.getenv("CI_REPOSITORY_URL")
+  branch = "master"
+  repo_url = "https://git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration"
+  path_template = file.path(repo_url, "-", "jobs", "artifacts", branch, "raw", "output")
+} else {
+  path_template = path_output
+}
+```
+
+```{r, echo=FALSE, results='asis'}
+newline = "\n\n\n"
+extentions = c(".pdf", ".png", ".gif")
+paths_folders = base::list.dirs(path = path_output, full.names = TRUE, recursive = FALSE)
+text_prints = c()
+for (path in paths_folders) {
+  folder_name = base::basename(path)
+  text_folder = sprintf("## %s%s", folder_name, newline)
+  cat(text_folder)
+  files = base::list.files(path = path)
+  files = files[unlist(lapply(X = files, FUN = function(x) grepl(paste(extentions, collapse = "|"), x)))]
+  files_unique = unique(unlist(lapply(X = files, FUN = function(x) tools::file_path_sans_ext(x))))
+  for (file in files_unique) {
+    text_file = sprintf("### %s%s", file, newline)
+    cat(text_file)
+    text_download = "Download figure as:"
+    for (ext in extentions) {
+      path_file = file.path(path_template, folder_name, paste0(file, ext))
+      if (!file.exists(path_file)) {
+        next
+      }
+      if (Sys.getenv("CI") == "true") {
+        path_file = paste0(path_file, "?job=renv")
+      }
+      if (ext %in% c(".png", ".gif")) {
+        text_image = sprintf("![](%s)%s", path_file, newline)
+        cat(text_image)
+      }
+      text_download = sprintf(paste(text_download, "[[%s]](%s)"), ext, path_file)
+    }
+    text_download = paste0(text_download, newline)
+    cat(text_download)
+  }
+}
+```
+
+
+
+
+
+
