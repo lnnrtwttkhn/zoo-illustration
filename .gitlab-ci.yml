@@ -45,4 +45,14 @@ renv:
   only:
     - master
 
+pages:
+  stage: publish
+  image: registry.git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/renv:latest
+  script:
+    - make index.html
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
 

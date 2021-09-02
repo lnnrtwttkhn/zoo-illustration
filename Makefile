@@ -17,3 +17,9 @@ badges-overview: code/zoo-stimuli-badges-overview.R
 	
 stimuli-screens: code/zoo-stimuli-screens.R
 	Rscript $<
+	
+index.html: index.Rmd
+	Rscript -e "rmarkdown::render('$<', output_dir = 'public')"
+	
+index.md: index.Rmd
+	Rscript -e "rmarkdown::render('$<', rmarkdown::md_document(variant = 'gfm'))"
