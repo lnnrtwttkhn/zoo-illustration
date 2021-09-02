@@ -10,7 +10,7 @@ output:
     toc_depth: 3
     number_sections: false
     highlight: pygments
-    theme: darkly
+    theme: yeti
     code_folding: "hide"
     df_print: paged
     fig_caption: true
