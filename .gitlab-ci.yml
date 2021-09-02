@@ -30,8 +30,8 @@ datalad:
       - input
       - output
     expire_in: 1 hour
-  # only:
-  #   - master
+  only:
+    - master
 
 renv:
   stage: generate
@@ -42,8 +42,8 @@ renv:
     paths:
       - output
     expire_in: 1 hour
-  # only:
-  #   - master
+  only:
+    - master
 
 pages:
   stage: publish
@@ -53,6 +53,6 @@ pages:
   artifacts:
     paths:
       - public
-  # only:
-  #   - master
+  only:
+    - master
 
