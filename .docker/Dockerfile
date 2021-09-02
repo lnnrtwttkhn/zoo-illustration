@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 r-cran-tidyverse r-cran-data.table \
 r-cran-patchwork r-cran-cowplot \
 r-cran-magic r-cran-magick r-cran-ggforce \
-r-cran-rmarkdown
+r-cran-rmarkdown r-cran-bookdown
 
 # add missing source packages in blocks of 4
 RUN Rscript -e "installOrQuit(c('here', 'pacman', 'assertr', 'viridis', 'lemon'))"
