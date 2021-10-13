@@ -1,4 +1,4 @@
-all: stimuli-badges transition-matrix study-procedure graph-structure badges-overview stimuli-screens
+all: stimuli-badges transition-matrix study-procedure graph-structure badges-overview stimuli-screens task-procedure
 
 stimuli-badges: code/zoo-stimuli-badges.R
 	Rscript $<
@@ -16,6 +16,9 @@ badges-overview: code/zoo-stimuli-badges-overview.R
 	Rscript $<
 	
 stimuli-screens: code/zoo-stimuli-screens.R
+	Rscript $<
+
+task-procedure: code/zoo-task-procedure.R
 	Rscript $<
 	
 index.html: index.Rmd
