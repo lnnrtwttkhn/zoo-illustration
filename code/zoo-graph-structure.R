@@ -1,117 +1,106 @@
-if (!requireNamespace("pacman")) install.packages("pacman")
-packages_cran <- c("here", "tidyverse", "data.table", "magic", "patchwork", "ggforce")
-#"ggforce", "grid", "png" cowplot
-pacman::p_load(char = packages_cran)
+if (!requireNamespace("here")) install.packages("here")
+source(here::here("code", "zoo-illustration-utilities.R"))
 path_badges = here::here("output", "badges", "*.png")
 path_output = here::here("output", "graph_structure")
+source(here::here("code", "zoo-graph-functions.R"))
 dir.create(path_output, showWarnings = FALSE)
 files_badges = Sys.glob(path_badges)
+num_nodes = 6
 
-radius = 2
-dat = data.table(
-  x = c(0),
-  y = c(0),
-  size = c(radius)
-)
-
-path_files = files_badges[1:6]
-get_images = function(path_files){
-  images_out = c()
-  for (path in path_files) {
-    image = magick::image_read(path)
-    image_raster = as.raster(image)
-    images_out = c(images_out, list(image_raster))
-  }
-  return(images_out)
-}
-
-images_raster = get_images(path_files=path_files)
-
-deg2rad = function(degree){
-  radian = 2 * pi * degree / 360
-  return(radian)
-}
-
-coord_circle_point = function(radius, angle_radian) {
-  x = radius * sin(angle_radian)
-  y = radius * cos(angle_radian)
-  output = list(x = x, y = y)
-  return(output)
-}
-
+path_files = files_badges[1:num_nodes]
+images_raster = get_images(path_files = path_files)
 badge_size = 1
-angles_degree = head(seq(0, 360, by = 60))
-angles_radians = deg2rad(angles_degree)
+radius = 2
+node_size = 20
+angles_degree_nodes = head(seq(0, 360, by = 60))
+angles_degree_side1 = head(seq(0, 360, by = 60)) - 15
+angles_degree_side2 = head(seq(0, 360, by = 60)) + 15
 
-dt_badge = data.table(
-  badge = seq(1, 6),
-  angle = angles_degree,
-  x = coord_circle_point(radius = radius, angle_radian = angles_radians)$x,
-  y = coord_circle_point(radius = radius, angle_radian = angles_radians)$y
+dt_nodes = data.table(
+  node_number = seq(1, num_nodes),
+  node_letter = LETTERS[seq(1, num_nodes)],
+  angle = angles_degree_nodes,
+  x_node_center = coord_circle_point(radius = radius, angle_radian = deg2rad(angles_degree_nodes))$x,
+  y_node_center = coord_circle_point(radius = radius, angle_radian = deg2rad(angles_degree_nodes))$y,
+  x_node_inner = coord_circle_point(radius = radius, angle_radian = deg2rad(angles_degree_nodes))$x,
+  y_node_inner = coord_circle_point(radius = radius, angle_radian = deg2rad(angles_degree_nodes))$y,
+  x_node_side1 = coord_circle_point(radius = radius, angle_radian = deg2rad(angles_degree_side1))$x,
+  y_node_side1 = coord_circle_point(radius = radius, angle_radian = deg2rad(angles_degree_side1))$y,
+  x_node_side2 = coord_circle_point(radius = radius, angle_radian = deg2rad(angles_degree_side2))$x,
+  y_node_side2 = coord_circle_point(radius = radius, angle_radian = deg2rad(angles_degree_side2))$y
 ) %>%
   .[, ":="(
-    xmin = x - badge_size * 0.5,
-    xmax = x + badge_size * 0.5,
-    ymin = y - badge_size * 0.5,
-    ymax = y + badge_size * 0.5
+    xmin = x_node_center - badge_size * 0.5,
+    xmax = x_node_center + badge_size * 0.5,
+    ymin = y_node_center - badge_size * 0.5,
+    ymax = y_node_center + badge_size * 0.5
+  )] %>%
+  .[, ":="(
+    arrow_x_side1 = shift(x_node_side1),
+    arrow_y_side1 = shift(y_node_side1),
+    arrow_x_side2 = shift(x_node_side2),
+    arrow_y_side2 = shift(y_node_side2)
   )]
 
-num_nodes = 6
-dt_lines = dt_badge %>%
-  .[,c("badge", "x", "y")] %>%
+
+la = data.table(
+  y = coord_circle_point(radius = 2, angle_radian = deg2rad(angles_degree_nodes))$y - coord_circle_point(radius = 0.5, angle_radian = deg2rad(angles_degree_nodes))$y,
+  x = coord_circle_point(radius = 2, angle_radian = deg2rad(angles_degree_nodes))$x - coord_circle_point(radius = 0.5, angle_radian = deg2rad(angles_degree_nodes))$x
+)
+
+na = data.table(
+  y = coord_circle_point(radius = 2, angle_radian = deg2rad(angles_degree_nodes))$y - coord_circle_point(radius = 0.5, angle_radian = deg2rad(head(seq(0, 360, by = 60)) + 30))$y,
+  x = coord_circle_point(radius = 2, angle_radian = deg2rad(angles_degree_nodes))$x - coord_circle_point(radius = 0.5, angle_radian = deg2rad(head(seq(0, 360, by = 60)) + 30))$x
+)
+
+fa = data.table(
+  y = coord_circle_point(radius = 2, angle_radian = deg2rad(angles_degree_nodes))$y - coord_circle_point(radius = 0.5, angle_radian = deg2rad(head(seq(0, 360, by = 60)) - 30))$y,
+  x = coord_circle_point(radius = 2, angle_radian = deg2rad(angles_degree_nodes))$x - coord_circle_point(radius = 0.5, angle_radian = deg2rad(head(seq(0, 360, by = 60)) - 30))$x
+)
+
+dt_lines = dt_nodes %>%
+  .[, c("node_number", "angle", "x_node_center", "y_node_center")] %>%
   .[rep(seq_len(.N), num_nodes), ] %>%
-  setorder(badge) %>%
-  .[, xend := rep(dt_badge$x, num_nodes)] %>%
-  .[, yend := rep(dt_badge$y, num_nodes)] %>%
-  .[, badge_next := rep(dt_badge$badge, num_nodes)] %>%
-  # remove duplication of nearest neighbor:
-  .[!(abs(badge_next - badge) %in% c(1, 5)),] %>%
-  .[, ":="(probability = ifelse(
-    abs(badge_next - badge) %in% c(1), "0.7", "0.1")
-  )]
-  
-ggplot(dat, aes(x0 = x, y0 = y)) + 
-  geom_segment(data = dt_lines, mapping = aes(
-    x = x, y = y, xend = xend, yend = yend, color = probability)) +
-  geom_circle(aes(r = size)) +
-  coord_equal() +
-  xlim(c(-3, 3)) +
-  ylim(c(-3, 3)) +
-  theme_classic() +
-  annotation_raster(raster = images_raster[[1]],
-                    xmin = dt_badge[1]$xmin,
-                    xmax = dt_badge[1]$xmax,
-                    ymin = dt_badge[1]$ymin,
-                    ymax = dt_badge[1]$ymax) +
-  annotation_raster(raster = images_raster[[2]],
-                    xmin = dt_badge[2]$xmin,
-                    xmax = dt_badge[2]$xmax,
-                    ymin = dt_badge[2]$ymin,
-                    ymax = dt_badge[2]$ymax) +
-  annotation_raster(raster = images_raster[[3]],
-                    xmin = dt_badge[3]$xmin,
-                    xmax = dt_badge[3]$xmax,
-                    ymin = dt_badge[3]$ymin,
-                    ymax = dt_badge[3]$ymax) +
-  annotation_raster(raster = images_raster[[4]],
-                    xmin = dt_badge[4]$xmin,
-                    xmax = dt_badge[4]$xmax,
-                    ymin = dt_badge[4]$ymin,
-                    ymax = dt_badge[4]$ymax) +
-  annotation_raster(raster = images_raster[[5]],
-                    xmin = dt_badge[5]$xmin,
-                    xmax = dt_badge[5]$xmax,
-                    ymin = dt_badge[5]$ymin,
-                    ymax = dt_badge[5]$ymax) +
-  annotation_raster(raster = images_raster[[6]],
-                    xmin = dt_badge[6]$xmin,
-                    xmax = dt_badge[6]$xmax,
-                    ymin = dt_badge[6]$ymin,
-                    ymax = dt_badge[6]$ymax)
+  setorder(node_number) %>%
+  .[, xend := rep(dt_nodes$x_node_center, num_nodes)] %>%
+  .[, yend := rep(dt_nodes$y_node_center, num_nodes)] %>%
+  .[, node_number_next := rep(dt_nodes$node_number, num_nodes)] %>%
+  # remove transitions to the same node and nearest neighbor:
+  .[!(abs(node_number_next - node_number) %in% c(0, 1, 5)), ] %>%
+  .[, by = .(node_number, node_number_next),
+    node_combination := paste(sort(c(node_number, node_number_next)), collapse = "")] %>%
+  dplyr::distinct(., node_combination, .keep_all = TRUE) %>%
+  setDT(.) %>%
+  .[, ":="(probability = ifelse(abs(node_number_next - node_number) %in% c(1), "0.7", "0.1"))] %>%
+  .[, by = .(node_number), node_next_index := seq(1, .N)]
 
-ggsave(file.path(path_output, "zoo_graph_structure.pdf"),
-       device = "pdf", dpi = "retina",
-       last_plot(), width = 4, height = 4)
-ggsave(file.path(path_output, "zoo_graph_structure.png"),
-       device = "png", dpi = "retina",
-       last_plot(), width = 4, height = 4)
+fig_graph = ggplot() +
+  geom_circle(aes(x0 = 0, y0 = 0, r = 2), fill = "red") +
+  geom_circle(data = dt_nodes, aes(x0 = x_node_center, y0 = y_node_center, r = 0.5), fill = "blue") +
+  geom_segment(data = dt_lines, mapping = aes(
+    x = x_node_center, y = y_node_center, xend = xend, yend = yend, color = probability),
+    color = "black", size = 0.5, inherit.aes = FALSE,
+    arrow = arrow(length = unit(0.03, "npc"), ends = "both", type = "closed")) +
+  geom_text(data = dt_nodes, aes(x = x_node_center, y = y_node_center, label = node_letter),
+            size = 12, color = "white", inherit.aes = FALSE) +
+  geom_point(data = la, aes(x = x, y = y), color = "green") +
+  geom_point(data = na, aes(x = x, y = y), color = "orange") +
+  geom_point(data = fa, aes(x = x, y = y), color = "yellow") +
+  geom_curve(
+    data = dt_nodes,
+    aes(x = x_node_side1, xend = arrow_x_side2,
+        y = y_node_side1, yend = arrow_y_side2),
+    arrow = arrow(length = unit(0.03, "npc"), ends = "first", type = "closed"),
+    curvature = 0.15, # TODO: how to calculate the curvature
+    angle = 90,
+    color = "black",
+    linetype = "solid",
+    size = 1
+  ) +
+  theme(panel.border = element_blank()) +
+  theme(panel.grid.major = element_blank()) +
+  theme(panel.grid.minor = element_blank()) +
+  coord_equal()
+
+save_figure(plot = fig_graph , filename = "graph_structure",
+            path = path_output, width = 4, height = 4)

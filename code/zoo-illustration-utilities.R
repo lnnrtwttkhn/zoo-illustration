@@ -1,7 +1,7 @@
 if (!requireNamespace("pacman")) install.packages("pacman")
 packages_cran <- c(
   "here", "tidyverse", "data.table", "assertr", "viridis", "patchwork", "lemon",
-  "cowplot"
+  "cowplot", "magic", "ggforce"
 )
 pacman::p_load(char = packages_cran)
 
