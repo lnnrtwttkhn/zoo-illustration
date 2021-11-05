@@ -1,6 +1,7 @@
 # Zoo Illustration
 
 [![pipeline status](https://git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/badges/master/pipeline.svg)](https://git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/-/commits/master)
+[![website](https://img.shields.io/badge/Website-<COLOR>.svg)](https://wittkuhn.mpib.berlin/zoo-illustration/)
 
 ## Description
 
@@ -8,7 +9,7 @@ This repository contains illustrations for the Zoo study.
 
 ## Downloads
 
-Download the **illustrations** from the latest build [here](https://git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/-/jobs/artifacts/master/browse?job=renv)!
+Download the **illustrations** from the latest build [here](https://git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/-/jobs/artifacts/master/browse?job=renv) or from the [project website](https://wittkuhn.mpib.berlin/zoo-illustration/)!
 
 ## Requirements
 
