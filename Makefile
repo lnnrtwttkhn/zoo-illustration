@@ -9,7 +9,7 @@ transition-matrix: code/zoo-transition-matrix.R
 study-procedure: code/zoo-study-procedure.R
 	Rscript $<
 	
-graph-structure: code/zoo-graph-structure.R
+graph-structure: code/zoo-graph-structure-extended.R
 	Rscript $<
 
 badges-overview: code/zoo-stimuli-badges-overview.R

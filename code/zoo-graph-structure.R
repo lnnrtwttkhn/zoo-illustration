@@ -66,7 +66,7 @@ dt_lines = dt_nodes %>%
   .[, yend := rep(dt_nodes$y_node_center, num_nodes)] %>%
   .[, node_number_next := rep(dt_nodes$node_number, num_nodes)] %>%
   # remove transitions to the same node and nearest neighbor:
-  .[!(abs(node_number_next - node_number) %in% c(0, 1, 5)), ] %>%
+  # .[!(abs(node_number_next - node_number) %in% c(0, 1, 5)), ] %>%
   .[, by = .(node_number, node_number_next),
     node_combination := paste(sort(c(node_number, node_number_next)), collapse = "")] %>%
   dplyr::distinct(., node_combination, .keep_all = TRUE) %>%
@@ -83,9 +83,9 @@ fig_graph = ggplot() +
     arrow = arrow(length = unit(0.03, "npc"), ends = "both", type = "closed")) +
   geom_text(data = dt_nodes, aes(x = x_node_center, y = y_node_center, label = node_letter),
             size = 12, color = "white", inherit.aes = FALSE) +
-  geom_point(data = la, aes(x = x, y = y), color = "green") +
+  # geom_point(data = la, aes(x = x, y = y), color = "green") +
   geom_point(data = na, aes(x = x, y = y), color = "orange") +
-  geom_point(data = fa, aes(x = x, y = y), color = "yellow") +
+  # geom_point(data = fa, aes(x = x, y = y), color = "yellow") +
   geom_curve(
     data = dt_nodes,
     aes(x = x_node_side1, xend = arrow_x_side2,
@@ -101,6 +101,8 @@ fig_graph = ggplot() +
   theme(panel.grid.major = element_blank()) +
   theme(panel.grid.minor = element_blank()) +
   coord_equal()
+fig_graph
+
 
 save_figure(plot = fig_graph , filename = "graph_structure",
             path = path_output, width = 4, height = 4)
