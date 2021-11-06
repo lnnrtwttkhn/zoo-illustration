@@ -70,7 +70,7 @@ cfg$edges_linetype = "solid"
 figure = ggplot()
 figure = draw_circle(figure, cfg)
 figure = draw_letters(figure, dt_nodes)
-figure = draw_edges(figure, dt_lines, cfg)
+figure = draw_edges(figure, dt_lines %>% .[!(abs(node_distance) %in% c(1, 5)), ], cfg)
 figure = draw_badges(figure, images_raster, dt_nodes)
 figure = figure + ggtitle("Graph") + theme(plot.title = element_text(hjust = 0.5))
 #figure = draw_curved_arrows(figure, dt_lines %>% .[node_distance %in% c(1, -5)], cfg)
