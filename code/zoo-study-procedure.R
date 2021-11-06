@@ -135,6 +135,7 @@ plot_main = function(df) {
     theme(axis.ticks.x.top = element_line(color = "black")) +
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(strip.text.y.left = element_text(angle = 0)) +
+    theme(plot.margin = unit(c(0, 0, 0, 0), "pt")) +
     theme(legend.position = "bottom", legend.box = "horizontal") +
     theme(legend.margin = margin(t = 0, r = 0, b = 0, l = 0)) +
     theme(legend.box.margin = margin(t = -5, r = 0, b = 0, l = 0)) +
@@ -143,4 +144,4 @@ plot_main = function(df) {
 
 plot_graph_procedure = plot_main(session2_main)
 save_figure(plot = plot_graph_procedure, filename = "study_graph_procedure",
-            path = path_output, width = 4, height = 3)
+            path = path_output, width = 5, height = 3)

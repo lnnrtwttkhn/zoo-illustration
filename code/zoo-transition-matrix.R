@@ -72,7 +72,7 @@ fig_trans_mat_bi = plot_trans_mat(
   title_name = "Transition matrix\nBidirectional graph")
 fig_trans_mat_both = fig_trans_mat_uni + fig_trans_mat_bi +
   plot_layout(guides = "collect") +
-  plot_annotation(tag_levels = "a") &
+  plot_annotation(tag_levels = c('1'), tag_prefix = '[', tag_suffix = ']') &
   theme(legend.position = "bottom", legend.box = "horizontal")
 ggsave(file.path(path_output, "zoo_graphs_transition_matrix.pdf"),
        device = cairo_pdf(), dpi = "retina",
