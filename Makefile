@@ -21,7 +21,7 @@ stimuli-screens: code/zoo-stimuli-screens.R
 task-procedure: code/zoo-task-procedure.R
 	Rscript $<
 	
-task-illustration: code/zoo-task-illustration.R
+graph-procedure: code/zoo-graph-procedure.R
 	Rscript $<
 
 hypotheses: code/zoo-behavioral-hypotheses.R

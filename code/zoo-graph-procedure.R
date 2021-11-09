@@ -15,7 +15,7 @@ path_graphtrial = Sys.glob(here::here("output", "illustration", "*task*graph*.pn
 stopifnot(length(path_graphtrial) == 1)
 path_hypotheses = Sys.glob(here::here("output", "hypotheses", "*hypotheses.png"))
 stopifnot(length(path_hypotheses) == 1)
-path_output = here::here("output", "task_illustration")
+path_output = here::here("output", "graph_procedure")
 dir.create(path_output, showWarnings = FALSE)
 
 fig_graphproc = make_figure(path_graphproc)
