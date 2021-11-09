@@ -26,7 +26,7 @@ plot_hypotheses = ggplot(data = dt, mapping = aes(
   geom_bar(stat = "identity") +
   facet_grid(vars(fct_rev(as.factor(phase))), vars(as.factor(hypothesis))) +
   xlab("Transition from A to ...") +
-  ylab("Reaction time") +
+  ylab("Behavioral responses | Classifier probabilities") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   theme(panel.background = element_blank()) +
   scale_fill_viridis_d(name = "Transition\nProbability") +
