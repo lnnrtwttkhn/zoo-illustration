@@ -23,7 +23,10 @@ task-procedure: code/zoo-task-procedure.R
 	
 task-illustration: code/zoo-task-illustration.R
 	Rscript $<
-	
+
+hypotheses: code/zoo-behavioral-hypotheses.R
+	Rscript $<
+
 index.html: index.Rmd
 	Rscript -e "rmarkdown::render('$<', output_dir = 'public')"
 	
