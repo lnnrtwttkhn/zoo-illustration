@@ -26,6 +26,6 @@ fig_task = fig_graphstruct / fig_transmat / (fig_graphproc + fig_graphtrial) +
   theme(plot.tag = element_text(face = "bold")) &
   theme(plot.margin = unit(c(2, 2, 2, 2), "pt"))
 
-save_figure(plot = fig_task, filename = "task_procedure",
+save_figure(plot = fig_task, filename = "graph_procedure",
             path = path_output, width = 8, height = 10)
     
