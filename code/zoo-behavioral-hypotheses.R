@@ -37,8 +37,8 @@ plot_hypotheses = ggplot(data = dt, mapping = aes(
   theme(axis.line.x = element_line(colour = "black", linetype = "solid", color = "black")) +
   coord_capped_cart(expand = TRUE, top = "both", bottom = "both", right = "both") +
   theme(axis.text.y = element_blank()) +
-  theme(axis.ticks.y = element_blank()) 
-
+  theme(axis.ticks.y = element_blank()) +
+  theme(legend.position = "bottom")
 
 filename = "behavioral_hypotheses"
-save_figure(plot = plot_hypotheses, filename, path = path_output, width = 6, height = 3)
+save_figure(plot = plot_hypotheses, filename, path = path_output, width = 5, height = 4)
