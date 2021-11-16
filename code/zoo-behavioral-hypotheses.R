@@ -8,9 +8,9 @@ dt = data.table(
   transition = rep(c("B", "C", "D", "E", "F"), 6),
   probability = rep(c(c(0.7, 0.1, 0.1, 0.1, 0.0), c(0.35, 0.1, 0.1, 0.1, 0.35)), 3),
   phase = rep(c(rep("Unidirectional", 5), rep("Bidirectional", 5)), 3),
-  hypothesis = c(rep("(a) No effect", 10),
-                 rep("(b) Effect of\ntransititon probabilities", 10),
-                 rep("(c) Effect of\ngraph structure", 10)),
+  hypothesis = c(rep("(1) No effect", 10),
+                 rep("(2) Effect of\ntransititon probabilities", 10),
+                 rep("(3) Effect of\ngraph structure", 10)),
   reaction_time = c(
     0.3, 0.3, 0.3, 0.3, 0.0,
     0.3, 0.3, 0.3, 0.3, 0.3,
