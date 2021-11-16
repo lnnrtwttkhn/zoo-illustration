@@ -24,7 +24,7 @@ df_bi = data.table(
   .[, "probability" := as.factor(probability)]
 
 
-plot_trans_mat = function(df, title_name){
+plot_trans_mat = function(df, title_name, colors){
   
   transition_matrix = ggplot(data = df, aes(x = t0, y = t1)) +
     geom_tile(aes(fill = probability)) +
@@ -32,21 +32,24 @@ plot_trans_mat = function(df, title_name){
     theme(axis.text = element_text(size = 16)) +
     xlab("Stimulus at t - 1") +
     ylab("Stimulus at trial t") +
-    scale_fill_viridis_d(name = "Transition\nprobability") +
+    scale_fill_manual(values = colors, name = "Transition\nprobability") +
+    scale_y_discrete(limits = rev) +
     theme(panel.grid.major = element_blank()) +
     theme(panel.grid.minor = element_blank()) +
     theme(panel.background = element_blank()) +
     theme(axis.line = element_blank()) +
+    theme(axis.text = element_text(color = "black")) +
+    theme(axis.title = element_text(color = "black")) +
     ggtitle(title_name) +
     theme(plot.title = element_text(hjust = 0.5))
   
   pimage_y <- axis_canvas(transition_matrix, axis = 'y') + 
-    draw_image(files_badges[1], y = 0.5, scale = 0.9) +
-    draw_image(files_badges[2], y = 1.5, scale = 0.9) +
-    draw_image(files_badges[3], y = 2.5, scale = 0.9) +
-    draw_image(files_badges[4], y = 3.5, scale = 0.9) +
-    draw_image(files_badges[5], y = 4.5, scale = 0.9) +
-    draw_image(files_badges[6], y = 5.5, scale = 0.9)
+    draw_image(files_badges[6], y = 0.5, scale = 0.9) +
+    draw_image(files_badges[5], y = 1.5, scale = 0.9) +
+    draw_image(files_badges[4], y = 2.5, scale = 0.9) +
+    draw_image(files_badges[3], y = 3.5, scale = 0.9) +
+    draw_image(files_badges[2], y = 4.5, scale = 0.9) +
+    draw_image(files_badges[1], y = 5.5, scale = 0.9)
   pimage_x <- axis_canvas(transition_matrix, axis = 'x') + 
     draw_image(files_badges[1], x = 0.5, scale = 0.9) +
     draw_image(files_badges[2], x = 1.5, scale = 0.9) +
@@ -63,15 +66,17 @@ plot_trans_mat = function(df, title_name){
 
 fig_trans_mat_uni = plot_trans_mat(
   df = df_uni,
-  title_name = "Transition matrix\nUnidirectional graph") &
+  title_name = "Transition matrix\nUnidirectional graph",
+  colors = cfg$probability_colors[c(1, 2, 4)]) &
   guides(fill = "none") +
   theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
 fig_trans_mat_bi = plot_trans_mat(
   df = df_bi,
-  title_name = "Transition matrix\nBidirectional graph")
+  title_name = "Transition matrix\nBidirectional graph",
+  colors = cfg$probability_colors[c(1, 2, 3)])
 fig_trans_mat_both = fig_trans_mat_uni + fig_trans_mat_bi +
   plot_layout(guides = "collect") +
-  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt")) &
   # plot_annotation(tag_levels = c('1'), tag_prefix = '[', tag_suffix = ']') &
   theme(legend.position = "bottom", legend.box = "horizontal")
 ggsave(file.path(path_output, "zoo_graphs_transition_matrix.pdf"),

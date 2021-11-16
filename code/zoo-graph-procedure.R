@@ -28,7 +28,7 @@ fig_task = fig_graphstruct / fig_transmat / (fig_graphproc + fig_hypotheses) +
   patchwork::plot_layout(nrow = 3) +
   patchwork::plot_annotation(tag_levels = "a") &
   theme(plot.tag = element_text(face = "bold")) &
-  theme(plot.margin = unit(c(2, 2, 2, 2), "pt"))
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
 
 save_figure(plot = fig_task, filename = "graph_procedure",
             path = path_output, width = 8, height = 10)

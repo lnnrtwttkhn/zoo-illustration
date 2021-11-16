@@ -110,7 +110,7 @@ session2_main = session2 %>%
 
 plot_main = function(df) {
   ggplot(data = df, aes(xmin = t_start_gap, xmax = t_stop_gap, ymin = 0, ymax = 1))  + 
-    geom_rect(aes(fill = graph), color = "black") +
+    geom_rect(aes(fill = graph), color = "black", alpha = 0.7) +
     geom_text(aes(x = label_breaks, y = 0.5, label = duration)) +
     facet_grid(rows = vars(group), scales = "free", switch = "y") +
     scale_y_continuous(name = "Duration\n(in min.)") +
@@ -120,7 +120,6 @@ plot_main = function(df) {
     #   sec.axis = dup_axis(breaks = df$t_stop_gap, labels = df$t_stop_gap,
     #                       name = "Time in the MRI scanner (in min.)")) +
     coord_capped_cart(top = "right") +
-    scale_fill_discrete(name = "Graph structure", drop = FALSE) +
     # theme(axis.text.x.bottom = element_text(angle = 45, hjust = 1)) +
     theme(axis.text.x.top = element_text(angle = 45, hjust = 0.5, vjust = 0.5)) +
     theme(panel.grid.major = element_blank()) +
@@ -137,7 +136,7 @@ plot_main = function(df) {
     theme(strip.text.y.left = element_text(angle = 0)) +
     scale_color_manual(values = cfg$graph_colors, name = "Graph") +
     scale_fill_manual(values = cfg$graph_colors, name = "Graph") +
-    theme(plot.margin = unit(c(0, 0, 0, 0), "pt")) +
+    theme(plot.margin = unit(c(2, 2, 2, 2), "pt")) +
     theme(legend.position = "bottom", legend.box = "horizontal") +
     theme(legend.margin = margin(t = 0, r = 0, b = 0, l = 0)) +
     theme(legend.box.margin = margin(t = -5, r = 0, b = 0, l = 0)) +

@@ -8,6 +8,7 @@ pacman::p_load(char = packages_cran)
 
 load_config <- function() {
   cfg <- c()
+  cfg$probability_colors = hcl.colors(4, "Dark Mint")
   cfg$graph_colors = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")[c(6,7)]
   return(cfg)
 }

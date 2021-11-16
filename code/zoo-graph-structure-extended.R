@@ -15,7 +15,7 @@ cfg$circle_radius = 2
 cfg$badge_radius = 2.7
 cfg$badge_size = 1
 cfg$letter_radius = 3.7
-colors_viridis = scales::viridis_pal()(3)
+colors_probabilities = load_config()$probability_colors
 
 dt_nodes = data.table(
   node_number = seq(1, num_nodes),
@@ -76,8 +76,8 @@ figure = figure + ggtitle("Graph") + theme(plot.title = element_text(hjust = 0.5
 #figure = draw_curved_arrows(figure, dt_lines %>% .[node_distance %in% c(1, -5)], cfg)
 figure_circle = figure
 
-cfg$arrow_curved_color = colors_viridis[3]
-cfg$arrow_straight_color = colors_viridis[2]
+cfg$arrow_curved_color = colors_probabilities[4]
+cfg$arrow_straight_color = colors_probabilities[2]
 cfg$arrow_ends = "last"
 cfg$highlight_color = "black"
 cfg$highlight_radius = 0.55
@@ -97,6 +97,8 @@ figure = draw_curved_arrows(figure, dt_lines_single %>% .[node_distance == 1], c
 figure = figure + ggtitle("Unidirectional") + theme(plot.title = element_text(hjust = 0.5))
 figure_uni = figure
 
+cfg$arrow_curved_color = colors_probabilities[3]
+cfg$arrow_straight_color = colors_probabilities[2]
 figure = ggplot()
 figure = draw_circle(figure, cfg)
 figure = draw_letters(figure, dt_nodes)
