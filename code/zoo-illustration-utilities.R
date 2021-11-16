@@ -3,7 +3,15 @@ packages_cran <- c(
   "here", "tidyverse", "data.table", "assertr", "viridis", "patchwork", "lemon",
   "cowplot", "magic", "ggforce"
 )
+
 pacman::p_load(char = packages_cran)
+
+load_config <- function() {
+  cfg <- c()
+  cfg$graph_colors = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")[c(6,7)]
+  return(cfg)
+}
+cfg = load_config()
 
 save_figure <- function(plot, filename, path, width, height) {
   ggsave(filename = paste0("zoo_figure_", filename, ".pdf"),

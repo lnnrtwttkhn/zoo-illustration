@@ -1,7 +1,5 @@
-if (!requireNamespace("pacman")) install.packages("pacman")
-packages_cran <- c("here", "tidyverse", "cowplot", "data.table", "magic",
-                   "patchwork")
-pacman::p_load(char = packages_cran)
+if (!requireNamespace("here")) install.packages("here")
+source(here::here("code", "zoo-illustration-utilities.R"))
 path_badges = here::here("output", "badges", "*.png")
 path_output = here::here("output", "transition_matrix")
 dir.create(path_output, showWarnings = FALSE)
@@ -66,13 +64,15 @@ plot_trans_mat = function(df, title_name){
 fig_trans_mat_uni = plot_trans_mat(
   df = df_uni,
   title_name = "Transition matrix\nUnidirectional graph") &
-  guides(fill = "none")
+  guides(fill = "none") +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
 fig_trans_mat_bi = plot_trans_mat(
   df = df_bi,
   title_name = "Transition matrix\nBidirectional graph")
 fig_trans_mat_both = fig_trans_mat_uni + fig_trans_mat_bi +
   plot_layout(guides = "collect") +
-  plot_annotation(tag_levels = c('1'), tag_prefix = '[', tag_suffix = ']') &
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
+  # plot_annotation(tag_levels = c('1'), tag_prefix = '[', tag_suffix = ']') &
   theme(legend.position = "bottom", legend.box = "horizontal")
 ggsave(file.path(path_output, "zoo_graphs_transition_matrix.pdf"),
        device = cairo_pdf(), dpi = "retina",

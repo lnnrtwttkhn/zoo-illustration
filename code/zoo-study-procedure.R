@@ -135,6 +135,8 @@ plot_main = function(df) {
     theme(axis.ticks.x.top = element_line(color = "black")) +
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(strip.text.y.left = element_text(angle = 0)) +
+    scale_color_manual(values = cfg$graph_colors, name = "Graph") +
+    scale_fill_manual(values = cfg$graph_colors, name = "Graph") +
     theme(plot.margin = unit(c(0, 0, 0, 0), "pt")) +
     theme(legend.position = "bottom", legend.box = "horizontal") +
     theme(legend.margin = margin(t = 0, r = 0, b = 0, l = 0)) +
