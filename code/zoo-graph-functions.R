@@ -26,7 +26,8 @@ draw_circle = function(figure, cfg) {
     geom_circle(
       mapping = aes(x0 = 0, y0 = 0, r = cfg$circle_radius),
       color = cfg$circle_color,
-      linetype = cfg$circle_linetype
+      linetype = cfg$circle_linetype,
+      size = cfg$circle_size,
     ) +
     theme(panel.border = element_blank()) +
     theme(panel.background = element_blank()) +
@@ -55,13 +56,22 @@ draw_badge_highlight = function(figure, dt, cfg) {
   return(figure)
 }
 
+draw_node_point = function(figure, dt, cfg) {
+  figure = figure + 
+    geom_point(data = dt, aes(x = x_node_center, y = y_node_center), pch = 21,
+      fill = "white", color = cfg$highlight_color,
+      size = cfg$highlight_point_size, stroke = 1)
+  return(figure)
+}
+
 draw_curved_arrows = function(figure, dt, cfg) {
   figure = figure + 
     lapply(split(dt, 1:nrow(dt)), function(dat) {
       geom_curve(data = dat, aes(
         x = x_node_center, y = y_node_center, xend = xend, yend = yend),
         arrow = arrow(length = unit(0.03, "npc"), ends = cfg$arrow_ends, type = "closed"),
-        curvature = dat$curvature, angle = 90, color = cfg$arrow_curved_color, linetype = "solid", size = rel(1))
+        curvature = dat$curvature, angle = 90, color = cfg$arrow_curved_color, linetype = "solid",
+        size = cfg$arrow_curved_size)
     })
 }
 

@@ -12,9 +12,9 @@ angles_degree_nodes = head(seq(0, 360, by = 60))
 
 cfg = list()
 cfg$circle_radius = 2
-cfg$badge_radius = 2.7
+cfg$badge_radius = 2.8
 cfg$badge_size = 1
-cfg$letter_radius = 3.7
+cfg$letter_radius = 3.8
 colors_probabilities = load_config()$probability_colors
 
 dt_nodes = data.table(
@@ -63,25 +63,31 @@ cfg$arrow_curved_color = "black"
 cfg$arrow_ends = "both"
 cfg$circle_radius = 2
 cfg$circle_linetype = "solid"
+cfg$circle_size = rel(1.5)
 cfg$circle_color = "black"
 cfg$edges_color = "black"
 cfg$edges_linetype = "solid"
+cfg$highlight_color = "black"
+cfg$highlight_point_size = rel(3.0)
 
 figure = ggplot()
 figure = draw_circle(figure, cfg)
 figure = draw_letters(figure, dt_nodes)
 figure = draw_edges(figure, dt_lines %>% .[!(abs(node_distance) %in% c(1, 5)), ], cfg)
 figure = draw_badges(figure, images_raster, dt_nodes)
+#figure = draw_node_point(figure, dt_nodes %>% .[node_letter == "A", ], cfg)
 figure = figure + ggtitle("Graph") + theme(plot.title = element_text(hjust = 0.5))
 #figure = draw_curved_arrows(figure, dt_lines %>% .[node_distance %in% c(1, -5)], cfg)
 figure_circle = figure
 
 cfg$arrow_curved_color = colors_probabilities[4]
+cfg$arrow_curved_size = rel(1.7)
 cfg$arrow_straight_color = colors_probabilities[2]
 cfg$arrow_ends = "last"
 cfg$highlight_color = "black"
 cfg$highlight_radius = 0.55
-cfg$circle_linetype = "dotted"
+cfg$circle_linetype = "14"
+cfg$circle_size = rel(1.5)
 cfg$circle_color = "gray"
 cfg$edges_color = "gray"
 cfg$edges_linetype = "dotted"
@@ -94,6 +100,7 @@ figure = draw_badge_highlight(figure, dt_nodes_single, cfg)
 figure = draw_badges(figure, images_raster, dt_nodes)
 figure = draw_straight_arrows(figure, dt_lines_single %>% .[!(node_distance %in% c(1, 5))], cfg)
 figure = draw_curved_arrows(figure, dt_lines_single %>% .[node_distance == 1], cfg)
+figure = draw_node_point(figure, dt_nodes %>% .[node_letter == "A", ], cfg)
 figure = figure + ggtitle("Unidirectional") + theme(plot.title = element_text(hjust = 0.5))
 figure_uni = figure
 
@@ -107,6 +114,7 @@ figure = draw_badge_highlight(figure, dt_nodes_single, cfg)
 figure = draw_badges(figure, images_raster, dt_nodes)
 figure = draw_straight_arrows(figure, dt_lines_single %>% .[!(node_distance %in% c(1, 5))], cfg)
 figure = draw_curved_arrows(figure, dt_lines_single %>% .[node_distance %in% c(1, 5)], cfg)
+figure = draw_node_point(figure, dt_nodes %>% .[node_letter == "A", ], cfg)
 figure = figure + ggtitle("Bidirectional") + theme(plot.title = element_text(hjust = 0.5))
 figure_bi = figure
 
