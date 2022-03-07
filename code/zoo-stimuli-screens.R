@@ -59,7 +59,7 @@ delay_stimuli = 80
 delay_iti_short = 75
 delay_iti_long = 1000
 
-list_stimuli = paste("-delay", delay_stimuli, paths_out[1:6])
+list_stimuli = paste("-delay", delay_stimuli, paths_out[c(2:6, 1)])
 list_fixation_short = rep(paste("-delay", delay_iti_short, path_fixation), 5)
 list_fixation_long = rep(paste("-delay", delay_iti_long, path_fixation), 1)
 list_fixation = c(list_fixation_short, list_fixation_long)
