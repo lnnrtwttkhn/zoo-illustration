@@ -33,6 +33,11 @@ dt_nodes = data.table(
     badge_xmax = x_badge_center + cfg$badge_size * 0.5,
     badge_ymin = y_badge_center - cfg$badge_size * 0.5,
     badge_ymax = y_badge_center + cfg$badge_size * 0.5
+  )] %>%
+  .[, ":="(
+    node_distance = c("0", "1 | 1", "2 | 2", "3 | 3", "4 | -2", "5 | -1"),
+    highlight_color = c("black", hcl.colors(5, "Viridis")),
+    highlight_radius = rep(0.55, nrow(.)) 
   )]
 
 dt_lines = dt_nodes %>%
@@ -84,8 +89,8 @@ cfg$arrow_curved_color = colors_probabilities[4]
 cfg$arrow_curved_size = rel(1.7)
 cfg$arrow_straight_color = colors_probabilities[2]
 cfg$arrow_ends = "last"
-cfg$highlight_color = "black"
-cfg$highlight_radius = 0.55
+# cfg$highlight_color = "black"
+# cfg$highlight_radius = 0.55
 cfg$circle_linetype = "14"
 cfg$circle_size = rel(1.5)
 cfg$circle_color = "gray"
@@ -96,7 +101,7 @@ figure = ggplot()
 figure = draw_circle(figure, cfg)
 figure = draw_letters(figure, dt_nodes)
 figure = draw_edges(figure, dt_lines %>% .[!(abs(node_distance) %in% c(1, 5)), ], cfg)
-figure = draw_badge_highlight(figure, dt_nodes_single, cfg)
+figure = draw_badge_highlight(figure, dt_nodes_single, cfg_guide = "none")
 figure = draw_badges(figure, images_raster, dt_nodes)
 figure = draw_straight_arrows(figure, dt_lines_single %>% .[!(node_distance %in% c(1, 5))], cfg)
 figure = draw_curved_arrows(figure, dt_lines_single %>% .[node_distance == 1], cfg)
@@ -110,7 +115,7 @@ figure = ggplot()
 figure = draw_circle(figure, cfg)
 figure = draw_letters(figure, dt_nodes)
 figure = draw_edges(figure, dt_lines %>% .[!(abs(node_distance) %in% c(1, 5)), ], cfg)
-figure = draw_badge_highlight(figure, dt_nodes_single, cfg)
+figure = draw_badge_highlight(figure, dt_nodes_single)
 figure = draw_badges(figure, images_raster, dt_nodes)
 figure = draw_straight_arrows(figure, dt_lines_single %>% .[!(node_distance %in% c(1, 5))], cfg)
 figure = draw_curved_arrows(figure, dt_lines_single %>% .[node_distance %in% c(1, 5)], cfg)
@@ -126,3 +131,25 @@ figure_graphs = figure_circle + figure_uni + figure_bi +
 save_figure(plot = figure_graphs, filename = "graph_structure",
             path = path_output, width = 8, height = 3.5)
  
+# add highlighting depending on node distance:
+
+figure = figure_uni
+figure = draw_badge_highlight(figure, dt_nodes, cfg_guide = "legend")
+figure = draw_badges(figure, images_raster, dt_nodes)
+figure_uni_dist = figure
+
+figure = figure_bi
+figure = draw_badge_highlight(figure, dt_nodes, cfg_guide = "legend")
+figure = draw_badges(figure, images_raster, dt_nodes)
+figure_bi_dist = figure
+
+figure_graphs_dist = figure_uni_dist + figure_bi_dist +
+  # patchwork::plot_annotation(tag_levels = c('1'), tag_prefix = '[', tag_suffix = ']') &
+  # theme(plot.tag = element_text(face = "bold")) & 
+  plot_layout(guides = 'collect') +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt")) &
+  theme(legend.position = "bottom", legend.title.align = 0.5) &
+  guides(color = guide_legend(nrow = 1))
+
+save_figure(plot = figure_graphs_dist, filename = "graph_structure_node_distance",
+            path = path_output, width = 5, height = 4)

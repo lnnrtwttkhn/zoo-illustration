@@ -48,11 +48,17 @@ draw_letters = function(figure, dt_nodes) {
   return(figure)
 }
 
-draw_badge_highlight = function(figure, dt, cfg) {
+draw_badge_highlight = function(figure, dt, cfg_guide = "none") {
   figure = figure + 
     geom_circle(data = dt, aes(
-      x0 = x_badge_center, y0 = y_badge_center, r = cfg$highlight_radius),
-      fill = cfg$highlight_color, color = cfg$highlight_color)
+      x0 = x_badge_center, y0 = y_badge_center, r = highlight_radius,
+      fill = highlight_color, color = highlight_color)) +
+    scale_colour_identity("Node distance\n(uni | bi)", labels = dt$node_distance,
+                          breaks = dt$highlight_color, guide = cfg_guide,
+                          limits = dt$highlight_color[2:length(dt$highlight_color)]) + 
+    scale_fill_identity("Node distance\n(uni | bi)", labels = dt$node_distance,
+                        breaks = dt$highlight_color, guide = cfg_guide,
+                        limits = dt$highlight_color[2:length(dt$highlight_color)])
   return(figure)
 }
 
