@@ -48,6 +48,13 @@ draw_letters = function(figure, dt_nodes) {
   return(figure)
 }
 
+draw_distance = function(figure, dt_nodes) {
+  figure = figure + 
+    geom_text(data = dt_nodes, aes(x = x_distance_center, y = y_distance_center, label = node_distance),
+              size = rel(4), color = "black", inherit.aes = FALSE)
+  return(figure)
+}
+
 draw_badge_highlight = function(figure, dt, cfg_guide = "none") {
   figure = figure + 
     geom_circle(data = dt, aes(

@@ -15,18 +15,22 @@ cfg$circle_radius = 2
 cfg$badge_radius = 2.8
 cfg$badge_size = 1
 cfg$letter_radius = 3.8
+cfg$distance_radius = 1.4
 colors_probabilities = load_config()$probability_colors
 
 dt_nodes = data.table(
   node_number = seq(1, num_nodes),
   node_letter = LETTERS[seq(1, num_nodes)],
+  node_distance = c("0 | 0", "1 | 1", "2 | 2", "3 | 3", "4 | -2", "5 | -1"),
   angle = angles_degree_nodes,
   x_node_center = coord_circle_point(radius = cfg$circle_radius, angle_radian = deg2rad(angles_degree_nodes))$x,
   y_node_center = coord_circle_point(radius = cfg$circle_radius, angle_radian = deg2rad(angles_degree_nodes))$y,
   x_badge_center = coord_circle_point(radius = cfg$badge_radius, angle_radian = deg2rad(angles_degree_nodes))$x,
   y_badge_center = coord_circle_point(radius = cfg$badge_radius, angle_radian = deg2rad(angles_degree_nodes))$y,
   x_letter_center = coord_circle_point(radius = cfg$letter_radius, angle_radian = deg2rad(angles_degree_nodes))$x,
-  y_letter_center = coord_circle_point(radius = cfg$letter_radius, angle_radian = deg2rad(angles_degree_nodes))$y
+  y_letter_center = coord_circle_point(radius = cfg$letter_radius, angle_radian = deg2rad(angles_degree_nodes))$y,
+  x_distance_center = coord_circle_point(radius = cfg$distance_radius, angle_radian = deg2rad(angles_degree_nodes))$x,
+  y_distance_center = coord_circle_point(radius = cfg$distance_radius, angle_radian = deg2rad(angles_degree_nodes))$y
 ) %>%
   .[, ":="(
     badge_xmin = x_badge_center - cfg$badge_size * 0.5,
@@ -143,6 +147,19 @@ figure = draw_badge_highlight(figure, dt_nodes, cfg_guide = "legend")
 figure = draw_badges(figure, images_raster, dt_nodes)
 figure_bi_dist = figure
 
+figure = ggplot()
+figure = draw_circle(figure, cfg)
+figure = draw_letters(figure, dt_nodes)
+figure = draw_distance(figure, dt_nodes %>% .[node_letter != "A", ])
+figure = draw_badge_highlight(figure, dt_nodes, cfg_guide = "legend")
+figure = draw_node_point(figure, dt_nodes %>% .[node_letter == "A", ], cfg)
+figure = draw_badges(figure, images_raster, dt_nodes)
+figure = figure + theme(legend.position = "none")
+figure = figure + ggtitle("Node distance (uni | bi)") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
+figure_dist = figure
+
 figure_graphs_dist = figure_uni_dist + figure_bi_dist +
   # patchwork::plot_annotation(tag_levels = c('1'), tag_prefix = '[', tag_suffix = ']') &
   # theme(plot.tag = element_text(face = "bold")) & 
@@ -153,3 +170,6 @@ figure_graphs_dist = figure_uni_dist + figure_bi_dist +
 
 save_figure(plot = figure_graphs_dist, filename = "graph_structure_node_distance",
             path = path_output, width = 5, height = 4)
+
+save_figure(plot = figure_dist, filename = "graph_structure_node_distance_combined",
+            path = path_output, width = 4, height = 4)
