@@ -173,3 +173,21 @@ save_figure(plot = figure_graphs_dist, filename = "graph_structure_node_distance
 
 save_figure(plot = figure_dist, filename = "graph_structure_node_distance_combined",
             path = path_output, width = 4, height = 4)
+
+cfg$circle_color = "white"
+cfg$arrow_curved_color = "black"
+figure = ggplot()
+figure = draw_circle(figure, cfg)
+figure = draw_letters(figure, dt_nodes)
+figure = draw_badges(figure, images_raster, dt_nodes)
+figure = draw_curved_arrows(figure, dt_lines_uni, cfg)
+figure_model = figure +
+  theme(panel.background = element_rect(fill = "transparent")) +
+  theme(plot.background = element_rect(fill = "transparent", color = NA)) +
+  theme(panel.grid.major = element_blank()) +
+  theme(panel.grid.minor = element_blank()) +
+  theme(legend.background = element_rect(fill = "transparent")) +
+  theme(legend.box.background = element_rect(fill = "transparent"))
+
+save_figure(plot = figure_model, filename = "graph_structure_model",
+            path = path_output, width = 2.5, height = 2.5)
