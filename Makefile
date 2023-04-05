@@ -32,3 +32,10 @@ index.html: index.Rmd
 	
 index.md: index.Rmd
 	Rscript -e "rmarkdown::render('$<', rmarkdown::md_document(variant = 'gfm'))"
+	
+keeper:
+	rclone config create zoo-illustration seafile url https://keeper.mpdl.mpg.de/ user wittkuhn@mpib-berlin.mpg.de library zoo-illustration pass $CI_KEEPER_PASS
+
+enable:
+	datalad siblings -d . enable -s keeper
+	
