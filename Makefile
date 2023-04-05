@@ -37,5 +37,6 @@ keeper:
 	rclone config create zoo-illustration seafile url https://keeper.mpdl.mpg.de/ user wittkuhn@mpib-berlin.mpg.de library zoo-illustration pass $CI_KEEPER_PASS
 
 enable:
-	datalad siblings -d . enable -s keeper
+	datalad siblings -d . enable -s keeper && \
+	datalad siblings configure -s origin --publish-depends keeper
 	
