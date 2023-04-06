@@ -36,7 +36,7 @@ datalad:
 renv:
   stage: generate
   variables:
-    RENV_CONFIG_AUTOLOADER_ENABLED: FALSE
+    RENV_CONFIG_AUTOLOADER_ENABLED: "FALSE"
   image: registry.git.mpib-berlin.mpg.de/wittkuhn/zoo-illustration/renv:latest
   script:
     - make all
