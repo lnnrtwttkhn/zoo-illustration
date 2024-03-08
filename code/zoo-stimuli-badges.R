@@ -4,6 +4,7 @@ pacman::p_load(char = packages_cran)
 path_output = here::here("output", "badges")
 dir.create(path_output, showWarnings = FALSE)
 path_input_files = Sys.glob(here::here("input", "stimuli", "*png"))
+if ( length(path_input_files) == 0 ) stop("missing input files!")
 
 for (path_file in path_input_files) {
   file_name = base::strsplit(base::basename(path_file), "\\.")[[1]][1]

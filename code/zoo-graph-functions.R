@@ -27,7 +27,7 @@ draw_circle = function(figure, cfg) {
       mapping = aes(x0 = 0, y0 = 0, r = cfg$circle_radius),
       color = cfg$circle_color,
       linetype = cfg$circle_linetype,
-      size = cfg$circle_size,
+      linewidth = cfg$circle_size,
     ) +
     theme(panel.border = element_blank()) +
     theme(panel.background = element_blank()) +
@@ -84,7 +84,7 @@ draw_curved_arrows = function(figure, dt, cfg) {
         x = x_node_center, y = y_node_center, xend = xend, yend = yend),
         arrow = arrow(length = unit(0.03, "npc"), ends = cfg$arrow_ends, type = "closed"),
         curvature = dat$curvature, angle = 90, color = cfg$arrow_curved_color, linetype = "solid",
-        size = cfg$arrow_curved_size)
+        linewidth = cfg$arrow_curved_size)
     })
 }
 
@@ -101,7 +101,7 @@ draw_straight_arrows = function(figure, dt, cfg) {
   figure = figure + 
     geom_segment(data = dt, aes(
       x = x_node_center, y = y_node_center, xend = xend, yend = yend),
-      size = rel(1), inherit.aes = FALSE, color = cfg$arrow_straight_color,
+      linewidth = rel(1), inherit.aes = FALSE, color = cfg$arrow_straight_color,
       arrow = arrow(length = unit(0.03, "npc"), ends = "last", type = "closed"))
   return(figure)
 }

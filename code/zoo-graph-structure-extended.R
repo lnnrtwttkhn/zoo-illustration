@@ -165,7 +165,8 @@ figure_graphs_dist = figure_uni_dist + figure_bi_dist +
   # theme(plot.tag = element_text(face = "bold")) & 
   plot_layout(guides = 'collect') +
   theme(plot.margin = unit(c(0, 0, 0, 0), "pt")) &
-  theme(legend.position = "bottom", legend.title.align = 0.5) &
+  theme(legend.position = "bottom") &
+  theme(legend.title = element_text(hjust = 0.5)) &
   guides(color = guide_legend(nrow = 1))
 
 save_figure(plot = figure_graphs_dist, filename = "graph_structure_node_distance",
@@ -191,3 +192,4 @@ figure_model = figure +
 
 save_figure(plot = figure_model, filename = "graph_structure_model",
             path = path_output, width = 2.5, height = 2.5)
+

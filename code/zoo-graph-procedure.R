@@ -11,7 +11,7 @@ path_transmat = Sys.glob(here::here("output", "transition_matrix", "*transition_
 stopifnot(length(path_transmat) == 1)
 path_graphstruct = Sys.glob(here::here("output", "graph_structure", "*graph_structure.png"))
 stopifnot(length(path_graphstruct) == 1)
-path_graphtrial = Sys.glob(here::here("output", "illustration", "*task*graph*.png"))
+path_graphtrial = Sys.glob(here::here("output", "illustration", "*task*sequence*.png"))
 stopifnot(length(path_graphtrial) == 1)
 path_hypotheses = Sys.glob(here::here("output", "hypotheses", "*hypotheses.png"))
 stopifnot(length(path_hypotheses) == 1)

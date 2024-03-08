@@ -79,7 +79,7 @@ fig_graph = ggplot() +
   geom_circle(data = dt_nodes, aes(x0 = x_node_center, y0 = y_node_center, r = 0.5), fill = "blue") +
   geom_segment(data = dt_lines, mapping = aes(
     x = x_node_center, y = y_node_center, xend = xend, yend = yend, color = probability),
-    color = "black", size = 0.5, inherit.aes = FALSE,
+    color = "black", linewidth = 0.5, inherit.aes = FALSE,
     arrow = arrow(length = unit(0.03, "npc"), ends = "both", type = "closed")) +
   geom_text(data = dt_nodes, aes(x = x_node_center, y = y_node_center, label = node_letter),
             size = 12, color = "white", inherit.aes = FALSE) +
@@ -95,7 +95,7 @@ fig_graph = ggplot() +
     angle = 90,
     color = "black",
     linetype = "solid",
-    size = 1
+    linewidth = 1
   ) +
   theme(panel.border = element_blank()) +
   theme(panel.grid.major = element_blank()) +
