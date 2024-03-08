@@ -25,7 +25,8 @@ save_figure <- function(plot, filename, path, width, height) {
 }
 
 make_figure = function(path) {
-  fig = ggdraw() +
-    draw_image(path)
-  return(fig)
+  figure = ggdraw() +
+    draw_image(path) +
+    theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
+  return(figure)
 }
