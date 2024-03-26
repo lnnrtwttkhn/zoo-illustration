@@ -62,9 +62,9 @@ draw_probability_uni = function(figure, dt_nodes) {
   dt_figure$y_probability_center[dt_figure$node_number == 5] = dt_figure$y_probability_center[dt_figure$node_number == 3]
   figure = figure + 
     geom_label(data = dt_figure, aes(
-      x = x_probability_center, y = y_probability_center, label = sprintf("%.1f", prob_uni),
+      x = x_probability_center, y = y_probability_center, label = prob_uni,
       fill = prob_uni_color, color = "black"),
-      size = rel(2), inherit.aes = FALSE)
+      size = rel(3), inherit.aes = FALSE)
   return(figure)
 }
 
@@ -75,9 +75,9 @@ draw_probability_bi = function(figure, dt_nodes) {
   dt_figure$y_probability_center[dt_figure$node_number == 5] = dt_figure$y_probability_center[dt_figure$node_number == 3]
   figure = figure + 
     geom_label(data = dt_figure, aes(
-      x = x_probability_center, y = y_probability_center, label = sprintf("%.1f", prob_bi),
+      x = x_probability_center, y = y_probability_center, label = prob_bi,
       fill = prob_bi_color, color = "black"),
-      size = rel(2), inherit.aes = FALSE)
+      size = rel(3), inherit.aes = FALSE)
   return(figure)
 }
 

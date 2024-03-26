@@ -12,7 +12,7 @@ angles_degree_nodes = head(seq(0, 360, by = 60))
 cfg = list()
 cfg$circle_radius = 2
 cfg$badge_radius = 2.8
-cfg$probability_radius = 2.4
+cfg$probability_radius = 2.8
 cfg$badge_size = 1
 cfg$letter_radius = 3.8
 cfg$distance_radius = 1.4
@@ -22,10 +22,10 @@ dt_nodes = data.table(
   node_number = seq(1, num_nodes),
   node_letter = LETTERS[seq(1, num_nodes)],
   node_distance = c("0 | 0", "1 | 1", "2 | 2", "3 | 3", "4 | -2", "5 | -1"),
-  prob_uni = c(0.0, 0.7, 0.1, 0.1, 0.1, 0.0),
+  prob_uni = sprintf("%.1f", c(0.0, 0.7, 0.1, 0.1, 0.1, 0.0)),
   prob_uni_color = c("white", colors_probabilities[4], rep(colors_probabilities[2], 3), "black"),
   prob_bi_color = c(colors_probabilities[3], colors_probabilities[3], rep(colors_probabilities[2], 3), "black"),
-  prob_bi = c(0.35, 0.35, 0.1, 0.1, 0.1, 0.35),
+  prob_bi = c(sprintf("%.2f", c(0.35, 0.35)), sprintf("%.1f", c(0.1, 0.1, 0.1)), sprintf("%.2f", 0.35)),
   angle = angles_degree_nodes,
   x_node_center = coord_circle_point(radius = cfg$circle_radius, angle_radian = deg2rad(angles_degree_nodes))$x,
   y_node_center = coord_circle_point(radius = cfg$circle_radius, angle_radian = deg2rad(angles_degree_nodes))$y,
@@ -196,7 +196,8 @@ figure_model = figure +
   theme(panel.grid.major = element_blank()) +
   theme(panel.grid.minor = element_blank()) +
   theme(legend.background = element_rect(fill = "transparent")) +
-  theme(legend.box.background = element_rect(fill = "transparent"))
+  theme(legend.box.background = element_rect(fill = "transparent")) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
 
 save_figure(plot = figure_model, filename = "graph_structure_model",
             path = path_output, width = 2.5, height = 2.5)
