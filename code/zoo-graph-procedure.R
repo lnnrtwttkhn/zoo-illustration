@@ -44,6 +44,6 @@ fig_task = plot_grid(
   ) +
   theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
 
-save_figure(plot = fig_task, filename = "graph_procedure",
+save_figure(plot = fig_task, filename = "task_design",
             path = path_output, width = 8, height = 11.5)
     

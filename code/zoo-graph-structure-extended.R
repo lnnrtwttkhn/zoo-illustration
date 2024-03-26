@@ -9,10 +9,10 @@ num_nodes = 6
 path_files = files_badges[1:num_nodes]
 images_raster = get_images(path_files = path_files)
 angles_degree_nodes = head(seq(0, 360, by = 60))
-
 cfg = list()
 cfg$circle_radius = 2
 cfg$badge_radius = 2.8
+cfg$probability_radius = 2.4
 cfg$badge_size = 1
 cfg$letter_radius = 3.8
 cfg$distance_radius = 1.4
@@ -22,6 +22,10 @@ dt_nodes = data.table(
   node_number = seq(1, num_nodes),
   node_letter = LETTERS[seq(1, num_nodes)],
   node_distance = c("0 | 0", "1 | 1", "2 | 2", "3 | 3", "4 | -2", "5 | -1"),
+  prob_uni = c(0.0, 0.7, 0.1, 0.1, 0.1, 0.0),
+  prob_uni_color = c("white", colors_probabilities[4], rep(colors_probabilities[2], 3), "black"),
+  prob_bi_color = c(colors_probabilities[3], colors_probabilities[3], rep(colors_probabilities[2], 3), "black"),
+  prob_bi = c(0.35, 0.35, 0.1, 0.1, 0.1, 0.35),
   angle = angles_degree_nodes,
   x_node_center = coord_circle_point(radius = cfg$circle_radius, angle_radian = deg2rad(angles_degree_nodes))$x,
   y_node_center = coord_circle_point(radius = cfg$circle_radius, angle_radian = deg2rad(angles_degree_nodes))$y,
@@ -30,7 +34,9 @@ dt_nodes = data.table(
   x_letter_center = coord_circle_point(radius = cfg$letter_radius, angle_radian = deg2rad(angles_degree_nodes))$x,
   y_letter_center = coord_circle_point(radius = cfg$letter_radius, angle_radian = deg2rad(angles_degree_nodes))$y,
   x_distance_center = coord_circle_point(radius = cfg$distance_radius, angle_radian = deg2rad(angles_degree_nodes))$x,
-  y_distance_center = coord_circle_point(radius = cfg$distance_radius, angle_radian = deg2rad(angles_degree_nodes))$y
+  y_distance_center = coord_circle_point(radius = cfg$distance_radius, angle_radian = deg2rad(angles_degree_nodes))$y,
+  x_probability_center = coord_circle_point(radius = cfg$probability_radius, angle_radian = deg2rad(angles_degree_nodes - 30))$x,
+  y_probability_center = coord_circle_point(radius = cfg$probability_radius, angle_radian = deg2rad(angles_degree_nodes - 30))$y
 ) %>%
   .[, ":="(
     badge_xmin = x_badge_center - cfg$badge_size * 0.5,
@@ -110,6 +116,7 @@ figure = draw_badges(figure, images_raster, dt_nodes)
 figure = draw_straight_arrows(figure, dt_lines_single %>% .[!(node_distance %in% c(1, 5))], cfg)
 figure = draw_curved_arrows(figure, dt_lines_single %>% .[node_distance == 1], cfg)
 figure = draw_node_point(figure, dt_nodes %>% .[node_letter == "A", ], cfg)
+figure = draw_probability_uni(figure, dt_nodes %>% .[!(node_letter %in% c("F")), ])
 figure = figure + ggtitle("Unidirectional") + theme(plot.title = element_text(hjust = 0.5))
 figure_uni = figure
 
@@ -124,6 +131,7 @@ figure = draw_badges(figure, images_raster, dt_nodes)
 figure = draw_straight_arrows(figure, dt_lines_single %>% .[!(node_distance %in% c(1, 5))], cfg)
 figure = draw_curved_arrows(figure, dt_lines_single %>% .[node_distance %in% c(1, 5)], cfg)
 figure = draw_node_point(figure, dt_nodes %>% .[node_letter == "A", ], cfg)
+figure = draw_probability_bi(figure, dt_nodes %>% .[!(node_letter %in% c("F")), ])
 figure = figure + ggtitle("Bidirectional") + theme(plot.title = element_text(hjust = 0.5))
 figure_bi = figure
 

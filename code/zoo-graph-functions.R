@@ -55,6 +55,32 @@ draw_distance = function(figure, dt_nodes) {
   return(figure)
 }
 
+draw_probability_uni = function(figure, dt_nodes) {
+  dt_figure <- dt_nodes
+  dt_figure$x_probability_center[dt_figure$node_number == 3] = dt_figure$x_node_center[dt_figure$node_number == 4]
+  dt_figure$y_probability_center[dt_figure$node_number == 4] = dt_figure$y_probability_center[dt_figure$node_number == 3]
+  dt_figure$y_probability_center[dt_figure$node_number == 5] = dt_figure$y_probability_center[dt_figure$node_number == 3]
+  figure = figure + 
+    geom_label(data = dt_figure, aes(
+      x = x_probability_center, y = y_probability_center, label = sprintf("%.1f", prob_uni),
+      fill = prob_uni_color, color = "black"),
+      size = rel(2), inherit.aes = FALSE)
+  return(figure)
+}
+
+draw_probability_bi = function(figure, dt_nodes) {
+  dt_figure <- dt_nodes
+  dt_figure$x_probability_center[dt_figure$node_number == 3] = dt_figure$x_node_center[dt_figure$node_number == 4]
+  dt_figure$y_probability_center[dt_figure$node_number == 4] = dt_figure$y_probability_center[dt_figure$node_number == 3]
+  dt_figure$y_probability_center[dt_figure$node_number == 5] = dt_figure$y_probability_center[dt_figure$node_number == 3]
+  figure = figure + 
+    geom_label(data = dt_figure, aes(
+      x = x_probability_center, y = y_probability_center, label = sprintf("%.1f", prob_bi),
+      fill = prob_bi_color, color = "black"),
+      size = rel(2), inherit.aes = FALSE)
+  return(figure)
+}
+
 draw_badge_highlight = function(figure, dt, cfg_guide = "none") {
   figure = figure + 
     geom_circle(data = dt, aes(
