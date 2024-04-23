@@ -51,8 +51,8 @@ plot_session = function(df) {
       sec.axis = dup_axis(breaks = df$t_stop_gap, labels = df$t_stop_gap,
                           name = "Time in the MRI scanner (in min.)")) +
     coord_capped_cart(top = "right") +
-    scale_fill_viridis_d(name = "Participants' task", drop = FALSE,
-                         direction = 1, option = "viridis") +
+    scale_fill_viridis(name = "Participants' task", drop = FALSE,
+                       direction = 1, discrete = TRUE, option = "viridis") +
     theme(axis.text.x.bottom = element_text(angle = 45, hjust = 1)) +
     theme(axis.text.x.top = element_text(angle = 45, hjust = 0.5, vjust = 0.5)) +
     theme(panel.grid.major = element_blank()) +
@@ -65,18 +65,24 @@ plot_session = function(df) {
     theme(axis.text.x = element_text(color = "black")) +
     theme(axis.line.x.top = element_line(color = "black")) +
     theme(axis.ticks.x.top = element_line(color = "black")) +
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
+    theme(text = element_text("Helvetica"))
 }
 
 plot_s1 = plot_session(sessions %>% .[session == "Session 1"]) +
-  ggtitle("Session 1")
+  ggtitle("Session 1") +
+  theme(legend.position = "none")
 plot_s2 = plot_session(sessions %>% .[session == "Session 2"]) +
-  ggtitle("Session 2")
-plot_s1_nolegend = plot_s1 + theme(legend.position = "none")
-study_procedure = (plot_s1_nolegend  / plot_s2) +
-  plot_layout(guides = "collect") +
-  plot_annotation(tag_levels = "a") &
-  theme(text = element_text("Helvetica"))
+  ggtitle("Session 2") +
+  theme(legend.position = "none")
+plot_legend = get_legend(plot_session(sessions))
+study_procedure = plot_grid(
+  plot_grid(
+    plot_s1,
+    plot_s2,
+    ncol = 1, nrow = 2, labels = c("a", "b")
+  ), plot_legend, nrow = 1, ncol = 2, rel_widths = c(0.85, 0.15)
+)
 
 save_figure(plot = plot_s1, filename = "study_procedure_session1",
             path = path_output, width = 8, height = 3)
