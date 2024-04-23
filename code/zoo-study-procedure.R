@@ -6,7 +6,7 @@ dir.create(path_output, showWarnings = FALSE)
 duration_s1 = c(2, 2, 4, 2, 2, 5, 2, 2, rep(6, 8), 5, 3)
 events_s1 = c("Localizer", "T1-Orientation", "T1-MPRAGE", "MB4-Orientation",
            "Shimming", "Rest Run 1", "Instructions", "Training",
-           paste(rep("Recall Run", 8), seq(8)),
+           paste(rep("Single Run", 8), seq(8)),
            "Rest Run 2", "Fieldmaps")
 t_start_s1 = c(0, head(cumsum(duration_s1), -1))
 t_stop_s1 = cumsum(duration_s1)
@@ -17,8 +17,8 @@ session1 = data.table("events" = events_s1, "duration" = duration_s1,
 
 duration_s2 = c(2, 2, 4, 2, 2, 6, rep(c(3, 10), 5), 3, 3)
 events_s2 = c("Localizer", "T1-Orientation", "T1-MPRAGE", "MB4-Orientation",
-              "Shimming", "Recall Run 9",
-              paste(rep(c("Rest Run", "Main Run"), 5), rep(seq(5), each = 2)),
+              "Shimming", "Single Run 9",
+              paste(rep(c("Rest Run", "Sequence Run"), 5), rep(seq(5), each = 2)),
               "Rest Run 6", "Fieldmaps")
 t_start_s2 = c(0, head(cumsum(duration_s2), -1))
 t_stop_s2 = cumsum(duration_s2)
@@ -32,12 +32,12 @@ sessions = rbind(session1, session2) %>%
   .[, by = .(session), t_start_gap := t_start + (gap * seq(0, .N - 1))] %>%
   .[, by = .(session), t_stop_gap := t_stop + (gap * seq(0, .N - 1))] %>%
   .[, by = .(session), label_breaks := t_start_gap + duration / 2] %>%
-  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Recall"), "Task: Recall", "Eyes closed")] %>%
+  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Single"), "Task: Single", "Eyes closed")] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Training"), "Task: Training", task)] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Instructions"), "Task: Instructions", task)] %>%
-  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Main"), "Task: Main", task)] %>%
+  .[, by = .(session), task := ifelse(stringr::str_detect(events, "Sequence"), "Task: Sequence", task)] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Rest"), "Rest (Fixation)", task)] %>%
-  .[, task := as.factor(factor(task, levels = c("Task: Instructions", "Task: Training", "Task: Recall", "Task: Main", "Rest (Fixation)", "Eyes closed")))]
+  .[, task := as.factor(factor(task, levels = c("Task: Instructions", "Task: Training", "Task: Single", "Task: Sequence", "Rest (Fixation)", "Eyes closed")))]
 
 plot_session = function(df) {
   ggplot(data = df,
@@ -87,9 +87,9 @@ save_figure(plot = study_procedure, filename = "study_procedure",
 
 group_labels = c("uni - bi", "bi - uni")
 session2_main = session2 %>%
-  .[stringr::str_detect(events, "Main"), ] %>%
+  .[stringr::str_detect(events, "Sequence"), ] %>%
   verify(t_stop - t_start == duration) %>%
-  rbind(., as.data.table(lapply(subset(., events == "Main Run 3"), rep, length(group_labels) - 1))) %>%
+  rbind(., as.data.table(lapply(subset(., events == "Sequence Run 3"), rep, length(group_labels) - 1))) %>%
   setorder(events) %>%
   .[, num_events := .N] %>%
   .[rep(seq_len(nrow(.)), length(group_labels)), ] %>%
@@ -98,7 +98,7 @@ session2_main = session2 %>%
   .[, by = .(group), graph_index := rep(seq(length(group_labels)), each = unique(.$num_events) / length(group_labels))] %>%
   .[, graph := unlist(mapply(function(x, y) unlist(strsplit(as.character(x), split = " - "))[y], group, graph_index))] %>%
   .[, graph := as.factor(factor(graph, levels = c("uni", "bi")))] %>%
-  .[events == "Main Run 3", by = .(events, graph_index), ":="(
+  .[events == "Sequence Run 3", by = .(events, graph_index), ":="(
     duration = duration / 2,
     t_start = ifelse(graph_index == 1, t_start, t_start + (t_stop - t_start) / 2),
     t_stop = ifelse(graph_index == 1, t_stop - (t_stop - t_start) / 2, t_stop)
