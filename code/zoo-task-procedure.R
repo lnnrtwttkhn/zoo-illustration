@@ -6,8 +6,8 @@ dir.create(path_output, showWarnings = FALSE)
 
 fig_response = make_figure(Sys.glob(file.path(path_illustration, "*response_buttons.png")))
 fig_training = make_figure(Sys.glob(file.path(path_illustration, "*task*training*.png")))
-fig_recall = make_figure(Sys.glob(file.path(path_illustration, "*task*recall*.png")))
-fig_graph = make_figure(Sys.glob(file.path(path_illustration, "*task*graph*.png")))
+fig_recall = make_figure(Sys.glob(file.path(path_illustration, "*task*single*.png")))
+fig_graph = make_figure(Sys.glob(file.path(path_illustration, "*task*sequence*.png")))
 
 # fig_task = fig_training / fig_recall + (fig_graph + fig_response) +
 fig_task = fig_recall + fig_graph +
@@ -16,4 +16,12 @@ fig_task = fig_recall + fig_graph +
   theme(plot.tag = element_text(face = "bold"))
 
 save_figure(plot = fig_task, filename = "task_procedure",
+            path = path_output, width = 7, height = 2)
+
+fig_stimulus_response = fig_training + fig_response +
+  patchwork::plot_layout(widths = c(0.7, 0.3)) +
+  patchwork::plot_annotation(tag_levels = "a") &
+  theme(plot.tag = element_text(face = "bold"))
+
+save_figure(plot = fig_stimulus_response, filename = "stimulus_response",
             path = path_output, width = 7, height = 2)
