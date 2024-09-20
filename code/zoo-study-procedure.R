@@ -32,6 +32,8 @@ sessions = rbind(session1, session2) %>%
   .[, by = .(session), t_start_gap := t_start + (gap * seq(0, .N - 1))] %>%
   .[, by = .(session), t_stop_gap := t_stop + (gap * seq(0, .N - 1))] %>%
   .[, by = .(session), label_breaks := t_start_gap + duration / 2] %>%
+  .[, rect_linecolor := ifelse(stringr::str_detect(events, "Rest"), "red", "black")] %>%
+  .[, rect_linewidth := ifelse(stringr::str_detect(events, "Rest"), 1.5, 0.5)] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Single"), "Task: Single", "Eyes closed")] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Training"), "Task: Training", task)] %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Instructions"), "Task: Instructions", task)] %>%
@@ -39,10 +41,9 @@ sessions = rbind(session1, session2) %>%
   .[, by = .(session), task := ifelse(stringr::str_detect(events, "Rest"), "Rest (Fixation)", task)] %>%
   .[, task := as.factor(factor(task, levels = c("Task: Instructions", "Task: Training", "Task: Single", "Task: Sequence", "Rest (Fixation)", "Eyes closed")))]
 
-plot_session = function(df) {
-  ggplot(data = df,
+plot_session = function(df, highlight = FALSE) {
+  figure = ggplot(data = df,
          aes(xmin = t_start_gap, xmax = t_stop_gap, ymin = 0, ymax = 1))  + 
-    geom_rect(aes(fill = task), color = "black") +
     geom_text(aes(x = label_breaks, y = 0.5, label = duration)) +
     #facet_grid(rows = vars(session), scales = "free", switch = "y") +
     scale_y_continuous(name = "Duration\n(in min.)") +
@@ -67,29 +68,43 @@ plot_session = function(df) {
     theme(axis.ticks.x.top = element_line(color = "black")) +
     theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
     theme(text = element_text("Helvetica"))
+  if (highlight == TRUE) {
+    figure = figure + 
+      geom_rect(aes(fill = task), color = df$rect_linecolor, linewidth = df$rect_linewidth)
+  } else if (highlight == FALSE) {
+    figure = figure + 
+      geom_rect(aes(fill = task), color = "black")
+  }
+  return(figure)
 }
 
-plot_s1 = plot_session(sessions %>% .[session == "Session 1"]) +
-  ggtitle("Session 1") +
-  theme(legend.position = "none")
-plot_s2 = plot_session(sessions %>% .[session == "Session 2"]) +
-  ggtitle("Session 2") +
-  theme(legend.position = "none")
-plot_legend = get_legend(plot_session(sessions))
-study_procedure = plot_grid(
-  plot_grid(
-    plot_s1,
-    plot_s2,
-    ncol = 1, nrow = 2, labels = c("a", "b")
-  ), plot_legend, nrow = 1, ncol = 2, rel_widths = c(0.85, 0.15)
-)
-
-save_figure(plot = plot_s1, filename = "study_procedure_session1",
-            path = path_output, width = 8, height = 3)
-save_figure(plot = plot_s2, filename = "study_procedure_session2",
-            path = path_output, width = 8, height = 3)
-save_figure(plot = study_procedure, filename = "study_procedure",
-            path = path_output, width = 8, height = 6)
+for (highlight in c(TRUE, FALSE)) {
+  plot_s1 = plot_session(sessions %>% .[session == "Session 1"], highlight = highlight) +
+    ggtitle("Session 1") +
+    theme(legend.position = "none")
+  plot_s2 = plot_session(sessions %>% .[session == "Session 2"], highlight = highlight) +
+    ggtitle("Session 2") +
+    theme(legend.position = "none")
+  plot_legend = get_legend(plot_session(sessions))
+  study_procedure = plot_grid(
+    plot_grid(
+      plot_s1,
+      plot_s2,
+      ncol = 1, nrow = 2, labels = c("a", "b")
+    ), plot_legend, nrow = 1, ncol = 2, rel_widths = c(0.85, 0.15)
+  )
+  if (highlight == TRUE) {
+    label = "_highlight_rest"
+  } else if (highlight == FALSE) {
+    label = ""
+  }
+  save_figure(plot = plot_s1, filename = paste0("study_procedure_session1", label),
+              path = path_output, width = 8, height = 3)
+  save_figure(plot = plot_s2, filename = paste0("study_procedure_session2", label),
+              path = path_output, width = 8, height = 3)
+  save_figure(plot = study_procedure, filename = paste0("study_procedure", label),
+              path = path_output, width = 8, height = 6)
+}
 
 group_labels = c("uni - bi", "bi - uni")
 session2_main = session2 %>%
