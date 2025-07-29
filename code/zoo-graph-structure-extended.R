@@ -135,13 +135,13 @@ figure = draw_probability_bi(figure, dt_nodes %>% .[!(node_letter %in% c("F")), 
 figure = figure + ggtitle("Bidirectional") + theme(plot.title = element_text(hjust = 0.5))
 figure_bi = figure
 
-figure_graphs = figure_circle + figure_uni + figure_bi +
+figure_graphs = figure_uni + figure_bi +
   # patchwork::plot_annotation(tag_levels = c('1'), tag_prefix = '[', tag_suffix = ']') &
   # theme(plot.tag = element_text(face = "bold")) & 
   theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
 
 save_figure(plot = figure_graphs, filename = "graph_structure",
-            path = path_output, width = 8, height = 3.5)
+            path = path_output, width = 5, height = 3.5)
  
 # add highlighting depending on node distance:
 

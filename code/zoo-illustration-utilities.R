@@ -1,10 +1,16 @@
-if (!requireNamespace("pacman")) install.packages("pacman")
-packages_cran <- c(
-  "here", "tidyverse", "data.table", "assertr", "viridis", "patchwork", "lemon",
-  "cowplot", "magic", "ggforce"
-)
-
-pacman::p_load(char = packages_cran)
+load_packages <- function() {
+  library("here")
+  library("tidyverse")
+  library("data.table")
+  library("assertr")
+  library("viridis")
+  library("patchwork")
+  library("lemon")
+  library("cowplot")
+  library("magic")
+  library("ggforce")
+}
+load_packages()
 
 load_config <- function() {
   cfg <- c()

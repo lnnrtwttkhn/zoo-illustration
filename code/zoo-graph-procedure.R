@@ -23,27 +23,27 @@ stopifnot(length(path_hypotheses) == 1)
 path_output = here::here("output", "graph_procedure")
 dir.create(path_output, showWarnings = FALSE)
 
-fig_task_single = make_figure(path_task_single)
-fig_task_sequence = make_figure(path_task_sequence)
+fig_task_single = make_figure(path_task_single) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
+fig_task_sequence = make_figure(path_task_sequence) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
 fig_graphproc = make_figure(path_graphproc)
-fig_transmat = make_figure(path_transmat)
-fig_graphstruct = make_figure(path_graphstruct)
+fig_transmat = make_figure(path_transmat) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
+fig_graphstruct = make_figure(path_graphstruct) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
 fig_graphtrial = make_figure(path_graphtrial)
 fig_hypotheses = make_figure(path_hypotheses)
 
 fig_task = plot_grid(
     plot_grid(fig_task_single, fig_task_sequence,
               nrow = 1, ncol = 2, rel_widths = c(0.55, 0.45), labels = c("a", "b")),
-    plot_grid(fig_graphstruct, labels = c("c"),
-              nrow = 1, ncol = 1),
-    plot_grid(fig_transmat, labels = c("d"),
-              nrow = 1, ncol = 1),
-    plot_grid(fig_graphproc, fig_hypotheses, labels = c("e", "f"),
-              nrow = 1, ncol = 2, vjust = -0.1),
-    nrow = 4, ncol = 1
+    plot_grid(fig_graphstruct, fig_transmat, labels = c("c", "d"),
+              nrow = 1, ncol = 2, rel_widths = c(0.5, 0.5)),
+    nrow = 2, ncol = 1
   ) +
   theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
 
 save_figure(plot = fig_task, filename = "task_design",
-            path = path_output, width = 8, height = 11.5)
+            path = path_output, width = 8, height = 5)
     

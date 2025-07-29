@@ -32,7 +32,7 @@ plot_trans_mat = function(df, title_name, colors){
     theme(axis.text = element_text(size = 16)) +
     xlab("Stimulus at t - 1") +
     ylab("Stimulus at trial t") +
-    scale_fill_manual(values = colors, name = "Transition\nprobability") +
+    scale_fill_manual(values = colors, name = "Transition probability") +
     scale_y_discrete(limits = rev) +
     theme(panel.grid.major = element_blank()) +
     theme(panel.grid.minor = element_blank()) +
@@ -41,7 +41,13 @@ plot_trans_mat = function(df, title_name, colors){
     theme(axis.text = element_text(color = "black")) +
     theme(axis.title = element_text(color = "black")) +
     ggtitle(title_name) +
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(legend.position = "bottom") +
+    theme(legend.title = element_text(size = rel(0.8))) +
+    theme(legend.text = element_text(size = rel(0.8))) +
+    theme(legend.key.size = unit(0.8, "lines")) +
+    guides(fill = guide_legend(title.position = "top", title.hjust = 0.5)) +
+    theme(legend.margin = margin(unit(c(0, 0, 0, 0), "pt")))
   
   pimage_y <- axis_canvas(transition_matrix, axis = 'y') + 
     draw_image(files_badges[6], y = 0.5, scale = 0.9) +
@@ -74,18 +80,18 @@ fig_trans_mat_bi = plot_trans_mat(
   df = df_bi,
   title_name = "Transition matrix\nBidirectional graph",
   colors = cfg$probability_colors[c(1, 2, 3)])
-fig_trans_mat_both = fig_trans_mat_uni + fig_trans_mat_bi +
+fig_trans_mat_both = fig_trans_mat_uni + fig_trans_mat_bi &
   plot_layout(guides = "collect") +
-  theme(plot.margin = unit(c(0, 0, 0, 0), "pt")) &
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt")) +
   # plot_annotation(tag_levels = c('1'), tag_prefix = '[', tag_suffix = ']') &
   theme(legend.position = "bottom", legend.box = "horizontal")
 ggsave(file.path(path_output, "zoo_graphs_transition_matrix.pdf"),
        device = cairo_pdf(), dpi = "retina",
-       fig_trans_mat_both, width = 8, height = 3.5)
+       fig_trans_mat_both, width = 5, height = 3.5)
 ggsave(file.path(path_output, "zoo_graphs_transition_matrix.png"),
        device = "png", dpi = "retina",
-       fig_trans_mat_both, width = 8, height = 3.5)
-
+       fig_trans_mat_both, width = 5, height = 3.5)
+ 
 
 
 
