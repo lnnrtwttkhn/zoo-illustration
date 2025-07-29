@@ -38,7 +38,7 @@ fig_hypotheses = make_figure(path_hypotheses)
 fig_task = plot_grid(
     plot_grid(fig_task_single, fig_task_sequence,
               nrow = 1, ncol = 2, rel_widths = c(0.55, 0.45), labels = c("a", "b")),
-    plot_grid(fig_graphstruct, fig_transmat, labels = c("c", "d"),
+    plot_grid(fig_graphstruct, fig_hypotheses, labels = c("c", "d"),
               nrow = 1, ncol = 2, rel_widths = c(0.5, 0.5)),
     nrow = 2, ncol = 1
   ) +
@@ -46,4 +46,11 @@ fig_task = plot_grid(
 
 save_figure(plot = fig_task, filename = "task_design",
             path = path_output, width = 8, height = 5)
-    
+
+fig_si = plot_grid(
+  fig_transmat, fig_graphproc,
+  nrow = 1, ncol = 2, rel_widths = c(0.45, 0.55), labels = c("a", "b")) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "pt"))
+
+save_figure(plot = fig_si, filename = "task_design_si",
+            path = path_output, width = 9, height = 3)
